@@ -120,7 +120,9 @@ export default function PersonalDetailsModal({ isOpen, onClose, user, onSaveUser
         course: selectedCourse
       };
       try {
+        localStorage.setItem('concept_academy_parent_child_course', selectedCourse);
         localStorage.setItem('aspire_parent_child_course', selectedCourse);
+        localStorage.setItem('concept_academy_user_course', selectedCourse);
         localStorage.setItem('aspire_user_course', selectedCourse);
       } catch (e) {}
     } else {
@@ -130,6 +132,7 @@ export default function PersonalDetailsModal({ isOpen, onClose, user, onSaveUser
       if (user?.parentName) updatedUser.parentName = user.parentName;
       if (user?.parentPhone) updatedUser.parentPhone = user.parentPhone;
       try {
+        localStorage.setItem('concept_academy_user_course', selectedCourse);
         localStorage.setItem('aspire_user_course', selectedCourse);
       } catch (e) {}
     }

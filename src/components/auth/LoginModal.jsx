@@ -79,8 +79,10 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
 
       // 1. Google Play Reviewer & Institute Admin accounts
       const authorizedAccounts = [
-        { email: 'admin.demo@aspire.local', pass: 'AspireDemo@2026', name: 'Administrator', role: 'admin', id: 'adm-demo' },
-        { email: 'aspirelearningcentre@outlook.com', pass: 'ZP&786', name: 'ASPIRE Admin', role: 'admin', id: 'admin-root' }
+        { email: 'admin.demo@conceptacademy.local', pass: 'ConceptAcademyDemo@2026', name: 'Administrator', role: 'admin', id: 'adm-demo' },
+        { email: 'admin.demo@aspire.local', pass: 'AspireDemo@2026', name: 'Administrator', role: 'admin', id: 'adm-demo-legacy' },
+        { email: 'conceptacademy@outlook.com', pass: 'ZP&786', name: 'Concept Academy Admin', role: 'admin', id: 'admin-root' },
+        { email: 'aspirelearningcentre@outlook.com', pass: 'ZP&786', name: 'Concept Academy Admin', role: 'admin', id: 'admin-root-legacy' }
       ];
 
       const matchedAccount = authorizedAccounts.find(
@@ -163,7 +165,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
       onLoginSuccess(authUser);
       onClose();
     } catch (err) {
-      console.error('[ASPIRE Login Error]:', err);
+      console.error('[Concept Academy Login Error]:', err);
       await minDelay;
       setIsVerifying(false);
       setLoading(false);
@@ -177,7 +179,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     setLoading(true);
     try {
       const isNative = Capacitor.isNativePlatform();
-      const redirectUrl = isNative ? 'com.aspire.learning://auth' : window.location.origin;
+      const redirectUrl = isNative ? 'com.conceptacademy.learning://auth' : window.location.origin;
 
       const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -375,7 +377,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             }}>
               <img
                 src="/logo.png"
-                alt="ASPIRE Logo"
+                alt="Concept Academy Logo"
                 style={{
                   width: '42px',
                   height: '42px',
@@ -388,7 +390,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             </h3>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
               {authView === 'login'
-                ? 'Sign in to access your ASPIRE academic portal'
+                ? 'Sign in to access your Concept Academy academic portal'
                 : 'Select your preferred verification method'}
             </p>
           </div>

@@ -1,4 +1,4 @@
-package com.aspire.learning;
+package com.conceptacademy.learning;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -101,15 +101,15 @@ public class AppPermissionsPlugin extends Plugin {
         call.resolve(ret);
     }
 
-    private static final String NOTIF_CHANNEL_ID = "aspire_notifications_channel";
-    private static final String NOTIF_CHANNEL_NAME = "Aspire Notices & Announcements";
+    private static final String NOTIF_CHANNEL_ID = "conceptacademy_notifications_channel";
+    private static final String NOTIF_CHANNEL_NAME = "Concept Academy Notices & Announcements";
 
     @PluginMethod
     public void showSystemNotification(PluginCall call) {
-        String title = call.getString("title", "Aspire Learning Centre");
+        String title = call.getString("title", "Concept Academy");
         String message = call.getString("message", "");
         if (message == null || message.trim().isEmpty()) {
-            message = call.getString("body", "You have a new announcement from Aspire Learning Centre.");
+            message = call.getString("body", "You have a new announcement from Concept Academy.");
         }
         int notifId = (int) (System.currentTimeMillis() & 0x7FFFFFFF);
 
@@ -129,7 +129,7 @@ public class AppPermissionsPlugin extends Plugin {
                     NOTIF_CHANNEL_NAME,
                     android.app.NotificationManager.IMPORTANCE_HIGH
                 );
-                channel.setDescription("Critical notifications, notices and alerts from Aspire Learning Centre");
+                channel.setDescription("Critical notifications, notices and alerts from Concept Academy");
                 channel.enableVibration(true);
                 channel.setVibrationPattern(new long[]{0, 250, 150, 250});
                 channel.enableLights(true);

@@ -1,13 +1,13 @@
-# Google Play Console Submission Checklist: ASPIRE Learning Centre
-**Application Name:** ASPIRE Learning Centre  
-**Package ID:** `com.aspire.learning`  
+# Google Play Console Submission Checklist: Concept Academy
+**Application Name:** Concept Academy  
+**Package ID:** `com.conceptacademy.learning`  
 **Target SDK:** 36 (Android 16 Compliant)  
-**Release Artifact:** `AspireLearning-release.aab` (17.6 MB)  
+**Release Artifact:** `ConceptAcademy-release.aab` (17.6 MB)  
 
 ---
 
 ## 1. Overview & Separation of Responsibilities
-This document provides an actionable step-by-step checklist for releasing ASPIRE Learning Centre on the Google Play Console. Items marked **[AUTOMATICALLY COMPLETED IN PROJECT]** have been engineered, configured, and tested in this codebase. Items marked **[MANUAL ACTION REQUIRED IN PLAY CONSOLE]** must be executed by the account owner inside the Google Play Console web dashboard.
+This document provides an actionable step-by-step checklist for releasing Concept Academy on the Google Play Console. Items marked **[AUTOMATICALLY COMPLETED IN PROJECT]** have been engineered, configured, and tested in this codebase. Items marked **[MANUAL ACTION REQUIRED IN PLAY CONSOLE]** must be executed by the account owner inside the Google Play Console web dashboard.
 
 ---
 
@@ -17,16 +17,16 @@ This document provides an actionable step-by-step checklist for releasing ASPIRE
 - **Status:** **[AUTOMATICALLY COMPLETED IN PROJECT]**  
   - Full privacy policy authored in [public/privacy-policy.html](file:///d:/ASPIRE%20APP/public/privacy-policy.html) detailing student data, Supabase storage, Meta OTP, security, and deletion policies.
 - **Manual Step:** **[MANUAL ACTION REQUIRED IN PLAY CONSOLE]**  
-  - In Play Console -> **Policy and programs -> App content -> Privacy policy**, enter the live public HTTPS URL where `privacy-policy.html` is hosted (e.g. `https://aspirelearningcentre.com/privacy-policy.html` or Supabase storage public URL).
+  - In Play Console -> **Policy and programs -> App content -> Privacy policy**, enter the live public HTTPS URL where `privacy-policy.html` is hosted (e.g. `https://conceptacademy.com/privacy-policy.html` or Supabase storage public URL).
 
 ### B. App Access & Reviewer Credentials
 - **Status:** **[AUTOMATICALLY COMPLETED IN PROJECT]**  
-  - Pre-configured demo accounts baked into client: `admin.demo@aspire.local`, `student.demo@aspire.local`, `parent.demo@aspire.local`, `teacher.demo@aspire.local` with password `AspireDemo@2026`. Detailed guide written to [play-store-review-access.md](file:///d:/ASPIRE%20APP/play-store-review-access.md).
+  - Pre-configured demo accounts baked into client: `admin.demo@conceptacademy.local`, `student.demo@conceptacademy.local`, `parent.demo@conceptacademy.local`, `teacher.demo@conceptacademy.local` with password `ConceptAcademyDemo@2026`. Detailed guide written to [play-store-review-access.md](file:///d:/ASPIRE%20APP/play-store-review-access.md).
 - **Manual Step:** **[MANUAL ACTION REQUIRED IN PLAY CONSOLE]**  
   - In Play Console -> **App content -> App access**, select **"All or some functionality is restricted"**.
   - Add credential instructions:
-    - User name: `student.demo@aspire.local`
-    - Password: `AspireDemo@2026`
+    - User name: `student.demo@conceptacademy.local`
+    - Password: `ConceptAcademyDemo@2026`
     - Instructions: "Select Student Login on welcome screen and sign in with demo credentials. Bypasses phone OTP."
 
 ### C. Ads Declaration
@@ -73,7 +73,7 @@ This document provides an actionable step-by-step checklist for releasing ASPIRE
   - External self-service deletion web page created in [public/delete-account.html](file:///d:/ASPIRE%20APP/public/delete-account.html).
 - **Manual Step:** **[MANUAL ACTION REQUIRED IN PLAY CONSOLE]**  
   - In Play Console -> **App content -> Data safety -> Data deletion**:
-    - Provide the live URL for account deletion: `https://aspirelearningcentre.com/delete-account.html` (or hosted Supabase storage URL).
+    - Provide the live URL for account deletion: `https://conceptacademy.com/delete-account.html` (or hosted Supabase storage URL).
     - Confirm both account details and academic logs can be deleted or requested for deletion.
 
 ### H. Financial Features & Play Billing Declaration
@@ -87,10 +87,10 @@ This document provides an actionable step-by-step checklist for releasing ASPIRE
 ## 3. Store Listing Setup
 
 ### Store Metadata
-- **App Name:** ASPIRE Learning Centre (<= 30 characters)
-- **Short Description:** Official student companion & coaching management app for ASPIRE Learning Centre. (<= 80 characters)
+- **App Name:** Concept Academy (<= 30 characters)
+- **Short Description:** Official student companion & coaching management app for Concept Academy. (<= 80 characters)
 - **Full Description:**
-  > Welcome to the official ASPIRE Learning Centre mobile app — designed for students, parents, and faculty of ASPIRE Learning Centre.
+  > Welcome to the official Concept Academy mobile app — designed for students, parents, and faculty of Concept Academy.
   > 
   > Key Features:
   > • Daily Attendance Tracking: Monitor attendance records and monthly percentage.
@@ -100,7 +100,7 @@ This document provides an actionable step-by-step checklist for releasing ASPIRE
   > • Tuition Fee Transparency: Instant visibility into offline coaching fee records and payment milestones.
   > • Important Announcements: Real-time broadcast alerts and updates directly from institute faculty.
   > 
-  > Stay connected with your academic journey at ASPIRE Learning Centre!
+  > Stay connected with your academic journey at Concept Academy!
 - **Category:** Education
 - **Tags:** Education, Coaching, School Management, Study Tools
 
@@ -117,10 +117,10 @@ This document provides an actionable step-by-step checklist for releasing ASPIRE
 2. Select **Create new release**.
 3. Choose **Play App Signing** (let Google manage the app signing key).
 4. Upload the production bundle:
-   - File: `AspireLearning-release.aab`
-   - Location: `d:\ASPIRE APP\AspireLearning-release.aab` (or `android/app/build/outputs/bundle/release/app-release.aab`)
+   - File: `ConceptAcademy-release.aab`
+   - Location: `d:\ASPIRE APP\ConceptAcademy-release.aab` (or `android/app/build/outputs/bundle/release/app-release.aab`)
 5. Verify bundle details:
-   - Package name: `com.aspire.learning`
+   - Package name: `com.conceptacademy.learning`
    - Version code: `1`
    - Version name: `1.0`
    - Target SDK: `36` (Android 16 compliant)
@@ -128,7 +128,7 @@ This document provides an actionable step-by-step checklist for releasing ASPIRE
 6. Release notes:
    ```xml
    <en-US>
-   Official initial release of ASPIRE Learning Centre student companion app. Features attendance tracking, batch schedules, test results, and offline coaching fee records.
+   Official initial release of Concept Academy student companion app. Features attendance tracking, batch schedules, test results, and offline coaching fee records.
    </en-US>
    ```
 7. Review warnings (confirm 0 errors).

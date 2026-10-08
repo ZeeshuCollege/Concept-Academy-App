@@ -1,4 +1,4 @@
-package com.aspire.learning;
+package com.conceptacademy.learning;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;

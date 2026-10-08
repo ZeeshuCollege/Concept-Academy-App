@@ -1,5 +1,5 @@
 /**
- * Master Data matching ASPIRE THEME.png exactly
+ * Master Data matching CONCEPT ACADEMY THEME.png exactly
  */
 
 export const DEFAULT_GREY_AVATAR = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128"><rect width="128" height="128" rx="28" fill="%23e2e8f0"/><circle cx="64" cy="48" r="22" fill="%2394a3b8"/><path d="M26 108c0-20.987 17.013-38 38-38s38 17.013 38 38v4H26v-4z" fill="%2394a3b8"/></svg>`;
@@ -18,7 +18,7 @@ export const mockUsers = {
     name: 'Student',
     role: 'student',
     course: 'JEE',
-    rollNumber: 'ASPIRE-101',
+    rollNumber: 'CONCEPT-101',
     email: '',
     phone: '',
     bloodGroup: '',

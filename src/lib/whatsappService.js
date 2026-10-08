@@ -1,5 +1,5 @@
 /**
- * WhatsApp OTP Service for ASPIRE Learning Centre
+ * WhatsApp OTP Service for Concept Academy
  * Uses Meta for Developers WhatsApp Cloud API (Free Tier: 1,000 free conversations/month)
  */
 

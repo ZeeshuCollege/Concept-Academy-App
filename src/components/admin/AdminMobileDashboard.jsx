@@ -151,7 +151,7 @@ export default function AdminMobileDashboard({
 
   const [courses, setCourses] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_courses_list');
+      const saved = localStorage.getItem('concept_academy_courses_list') || localStorage.getItem('aspire_courses_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -162,7 +162,9 @@ export default function AdminMobileDashboard({
 
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_courses_list', JSON.stringify(courses));
+      const json = JSON.stringify(courses);
+      localStorage.setItem('concept_academy_courses_list', json);
+      localStorage.setItem('aspire_courses_list', json);
       broadcastDataChange('courses', { count: courses.length });
     } catch {}
   }, [courses]);
@@ -172,7 +174,7 @@ export default function AdminMobileDashboard({
     setTeachers(getStoredTeachers());
     setParents(getStoredParents());
     try {
-      const saved = localStorage.getItem('aspire_courses_list');
+      const saved = localStorage.getItem('concept_academy_courses_list') || localStorage.getItem('aspire_courses_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) setCourses(parsed);
@@ -306,7 +308,7 @@ export default function AdminMobileDashboard({
     if (found) {
       setNewParentChildName(found.name || '');
       setNewParentChildRoll(found.roll || '');
-      setNewParentChildEmail(found.email || `${(found.name || 'student').toLowerCase().replace(/\s+/g, '')}@aspire.edu`);
+      setNewParentChildEmail(found.email || `${(found.name || 'student').toLowerCase().replace(/\s+/g, '')}@conceptacademy.edu`);
       setNewParentChildCourse(found.course || 'JEE');
     }
   };
@@ -338,7 +340,7 @@ export default function AdminMobileDashboard({
 
     const childName = newParentChildName.trim() || 'Student';
     const childRoll = newParentChildRoll.trim() || (students.length + 101).toString();
-    const childEmail = newParentChildEmail.trim() || `${childName.toLowerCase().replace(/\s+/g, '')}@aspire.edu`;
+    const childEmail = newParentChildEmail.trim() || `${childName.toLowerCase().replace(/\s+/g, '')}@conceptacademy.edu`;
     const childCourse = newParentChildCourse.trim() || 'JEE';
 
     // Find matching enrolled student
@@ -707,7 +709,7 @@ export default function AdminMobileDashboard({
           email: cleanEmail,
           password: cleanPassword,
           roll: rollNo,
-          rollNumber: `ASPIRE-2025-${rollNo}`,
+          rollNumber: `CONCEPT-2025-${rollNo}`,
           course: newUserCourse || 'JEE',
           attendance: 'Present',
           score: '85%',
@@ -846,7 +848,7 @@ export default function AdminMobileDashboard({
       email: trimmedEmail,
       password: trimmedPass,
       roll: rollNo,
-      rollNumber: `ASPIRE-2025-${rollNo}`,
+      rollNumber: `CONCEPT-2025-${rollNo}`,
       course: newStudentCourse,
       attendance: 'Present',
       score: '85%',
@@ -866,7 +868,7 @@ export default function AdminMobileDashboard({
       password: trimmedPass,
       role: 'student',
       course: newStudentCourse,
-      rollNumber: `ASPIRE-2025-${rollNo}`,
+      rollNumber: `CONCEPT-2025-${rollNo}`,
       phone: '',
       bloodGroup: ''
     });
@@ -2076,7 +2078,7 @@ export default function AdminMobileDashboard({
                 <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>Student Email Address</label>
                 <input
                   type="email"
-                  placeholder="e.g. aryan.gupta@aspire.edu"
+                  placeholder="e.g. aryan.gupta@conceptacademy.edu"
                   value={newParentChildEmail}
                   onChange={e => setNewParentChildEmail(e.target.value)}
                   style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', marginTop: '4px', fontSize: '13px' }}

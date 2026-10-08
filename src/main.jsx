@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div style={{ padding: '24px', background: '#fef2f2', color: '#991b1b', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>ASPIRE UI Render Error</h2>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Concept Academy UI Render Error</h2>
           <p style={{ fontSize: '14px', marginBottom: '16px' }}>{this.state.error?.toString()}</p>
           <pre style={{ background: '#ffffff', padding: '12px', borderRadius: '8px', fontSize: '11px', overflow: 'auto', border: '1px solid #fecaca' }}>
             {this.state.errorInfo?.componentStack || this.state.error?.stack}

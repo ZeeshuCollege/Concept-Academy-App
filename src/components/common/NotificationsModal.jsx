@@ -282,7 +282,7 @@ export default function NotificationsModal({ isOpen, onClose, notices = [], onMa
           fontSize: '11px',
           color: 'var(--text-muted)'
         }}>
-          ASPIRE Closed Ecosystem • Real-time Instant Delivery Active
+          Concept Academy Closed Ecosystem • Real-time Instant Delivery Active
         </div>
       </div>
     </div>

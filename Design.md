@@ -1,7 +1,7 @@
-# ASPIRE Learning Centre - Design System & UI Specification
+# Concept Academy - Design System & UI Specification
 
 | **Document Version** | 2.0.0 |
-| **Visual Source** | `ASPIRE THEME.png` (24 Master Screen Comps) |
+| **Visual Source** | `CONCEPT ACADEMY THEME.png` (24 Master Screen Comps) |
 | **Target Platforms** | Mobile (iOS & Android) & Web (Desktop Admin & Responsive Teacher Portal) |
 | **Design Language** | Clean Educational Minimalism, Elevated Cards, Purposeful Accents |
 
@@ -9,7 +9,7 @@
 
 ## 1. Brand Identity & Visual Foundations
 
-The visual identity of **ASPIRE Learning Centre** combines academic prestige with clean modern technology. The design prioritizes legibility, scannability for fast classroom roll-calls, and reassuring clarity for parents reviewing student progress.
+The visual identity of **Concept Academy** combines academic prestige with clean modern technology. The design prioritizes legibility, scannability for fast classroom roll-calls, and reassuring clarity for parents reviewing student progress.
 
 - **Brand Mark**: A modern geometric upward delta/triangle crafted from three layered gradient ribbons symbolizing continuous growth, academic excellence, and aspiration.
 - **Tagline**: *"Better Learning, Bigger Dreams"*
@@ -184,7 +184,7 @@ The typography employs **Outfit** (primary heading and display) paired with **In
 
 ## 6. Screen-by-Screen Visual Architecture (All 24 Screens)
 
-Synthesized directly from `ASPIRE THEME.png`:
+Synthesized directly from `CONCEPT ACADEMY THEME.png`:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -252,7 +252,7 @@ The In-App Document Viewer is designed to render test papers and study notes sec
 │  ← Physics Test 01: Mechanics                 [Close]  │
 ├────────────────────────────────────────────────────────┤
 │                                                        │
-│   ASPIRE LEARNING CENTRE - JEE ADVANCED MOCK           │
+│   CONCEPT ACADEMY - JEE ADVANCED MOCK                  │
 │                                                        │
 │   Time: 90 Minutes                    Max Marks: 100   │
 │                                                        │

@@ -191,7 +191,7 @@ export const mockLast10Tests = [
 
 const getCombinedTests = () => {
   try {
-    const saved = JSON.parse(localStorage.getItem('aspire_tests_list') || '[]');
+    const saved = JSON.parse(localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list') || '[]');
     const completed = saved.filter(t => (t.status || '').toLowerCase() === 'completed');
     if (completed.length > 0) {
       const mapped = completed.map((t, idx) => ({

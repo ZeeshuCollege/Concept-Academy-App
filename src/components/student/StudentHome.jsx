@@ -5,7 +5,7 @@ import { useDataSync } from '../../lib/syncEvents';
 export default function StudentHome({ user, onNavigate, onOpenTestPaper }) {
   const loadTodayLecture = () => {
     try {
-      const timetable = JSON.parse(localStorage.getItem('aspire_admin_timetable') || '[]');
+      const timetable = JSON.parse(localStorage.getItem('concept_academy_admin_timetable') || localStorage.getItem('aspire_admin_timetable') || '[]');
       if (Array.isArray(timetable) && timetable.length > 0) {
         return timetable[0];
       }

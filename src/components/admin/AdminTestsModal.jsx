@@ -21,7 +21,7 @@ export const DURATION_OPTIONS = [
 export default function AdminTestsModal({ isOpen, onClose }) {
   const [tests, setTests] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -32,14 +32,16 @@ export default function AdminTestsModal({ isOpen, onClose }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_tests_list', JSON.stringify(tests));
+      const json = JSON.stringify(tests);
+      localStorage.setItem('concept_academy_tests_list', json);
+      localStorage.setItem('aspire_tests_list', json);
       broadcastDataChange('tests', { count: tests.length });
     } catch (e) {}
   }, [tests]);
 
   useDataSync(['tests'], () => {
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setTests(parsed);

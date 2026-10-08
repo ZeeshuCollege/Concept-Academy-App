@@ -8,7 +8,7 @@ export default function TestsView({ onOpenTestPaper }) {
 
   const [testsList, setTestsList] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -19,7 +19,7 @@ export default function TestsView({ onOpenTestPaper }) {
 
   useDataSync(['tests', 'marks'], () => {
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setTestsList(parsed);

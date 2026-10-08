@@ -1,5 +1,5 @@
 /**
- * ASPIRE LEARNING CENTRE - Complete Institute Data Export Service
+ * Concept Academy - Complete Institute Data Export Service
  * Collects live institute data into table formats, generates downloadable
  * files (PDF, XLSX, CSV), opens system Print to PDF, and handles mobile phone storage.
  */
@@ -9,7 +9,7 @@ import autoTable from 'jspdf-autotable';
 import { getStoredStudents, getStoredTeachers } from './userAuthStore';
 import { getStoredFees } from './feeService';
 
-export const FILE_BASE_NAME = 'Aspire Learning Centre Data';
+export const FILE_BASE_NAME = 'Concept Academy Data';
 
 /**
  * Collects all institute data across students, faculty, fees, courses, timetable, tests.
@@ -21,22 +21,22 @@ export function collectInstituteTablesData() {
 
   let timetable = [];
   try {
-    timetable = JSON.parse(localStorage.getItem('aspire_admin_timetable') || '[]');
+    timetable = JSON.parse(localStorage.getItem('concept_academy_admin_timetable') || localStorage.getItem('aspire_admin_timetable') || '[]');
   } catch {}
 
   let tests = [];
   try {
-    tests = JSON.parse(localStorage.getItem('aspire_tests_list') || '[]');
+    tests = JSON.parse(localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list') || '[]');
   } catch {}
 
   let courses = [];
   try {
-    courses = JSON.parse(localStorage.getItem('aspire_courses_list') || '[]');
+    courses = JSON.parse(localStorage.getItem('concept_academy_courses_list') || localStorage.getItem('aspire_courses_list') || '[]');
   } catch {}
 
   let studyMaterials = [];
   try {
-    studyMaterials = JSON.parse(localStorage.getItem('aspire_study_materials') || '[]');
+    studyMaterials = JSON.parse(localStorage.getItem('concept_academy_study_materials') || localStorage.getItem('aspire_study_materials') || '[]');
   } catch {}
 
   return {
@@ -71,7 +71,7 @@ export async function downloadBlobFile(blob, filename) {
           await navigator.share({
             files: [file],
             title: filename,
-            text: 'Aspire Learning Centre Institute Data Report'
+            text: 'Concept Academy Institute Data Report'
           });
           return true;
         }
@@ -110,7 +110,7 @@ export async function downloadBlobFile(blob, filename) {
  */
 export function generateCSVReport(data) {
   let csv = '\uFEFF'; // UTF-8 BOM
-  csv += 'ASPIRE LEARNING CENTRE - COMPLETE INSTITUTE DATA REPORT\n';
+  csv += 'CONCEPT ACADEMY - COMPLETE INSTITUTE DATA REPORT\n';
   csv += `Generated On: ${data.timestamp}\n\n`;
 
   // Table 1: Students
@@ -197,7 +197,7 @@ export function generateExcelReport(data) {
       </style>
     </head>
     <body>
-      <h2 style="color: #0f172a; margin-bottom: 2px;">ASPIRE LEARNING CENTRE</h2>
+      <h2 style="color: #0f172a; margin-bottom: 2px;">CONCEPT ACADEMY</h2>
       <h4 style="color: #0284c7; margin-top: 0;">Complete Institute Master Data Report</h4>
       <p style="font-size: 11px; color: #64748b;">Generated On: ${data.timestamp} • All Academic Records</p>
 
@@ -373,7 +373,7 @@ export function generatePDFDocument(data) {
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.text('ASPIRE LEARNING CENTRE', 40, 32);
+  doc.text('CONCEPT ACADEMY', 40, 32);
 
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
@@ -546,7 +546,7 @@ export function generatePDFDocument(data) {
     doc.setFontSize(8);
     doc.setTextColor(148, 163, 184);
     doc.text(
-      `Page ${i} of ${pageCount} | Aspire Learning Centre Data`,
+      `Page ${i} of ${pageCount} | Concept Academy Data`,
       doc.internal.pageSize.width / 2,
       doc.internal.pageSize.height - 15,
       { align: 'center' }
@@ -628,7 +628,7 @@ function getPrintableHTML(data) {
     </head>
     <body>
       <div class="header">
-        <h1 class="title">ASPIRE LEARNING CENTRE</h1>
+        <h1 class="title">CONCEPT ACADEMY</h1>
         <div class="subtitle">Complete Institute Master Data Report</div>
         <div class="meta">Generated: ${data.timestamp} • Document: ${FILE_BASE_NAME}</div>
       </div>

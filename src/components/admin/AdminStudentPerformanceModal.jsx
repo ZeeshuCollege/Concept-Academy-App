@@ -15,9 +15,9 @@ const INITIAL_DEMO_STUDENTS = [
     id: 'std-p01',
     name: 'Aarav Sharma',
     roll: '101',
-    rollNumber: 'ASPIRE-2025-101',
+    rollNumber: 'CONCEPT-2025-101',
     course: '12th Science',
-    email: 'aarav.sharma@aspire.local',
+    email: 'aarav.sharma@conceptacademy.local',
     phone: '+919820112233',
     attendance: 'Present',
     score: '88%',
@@ -27,9 +27,9 @@ const INITIAL_DEMO_STUDENTS = [
     id: 'std-p02',
     name: 'Priya Patel',
     roll: '102',
-    rollNumber: 'ASPIRE-2025-102',
+    rollNumber: 'CONCEPT-2025-102',
     course: 'JEE (Mains + Adv)',
-    email: 'priya.patel@aspire.local',
+    email: 'priya.patel@conceptacademy.local',
     phone: '+919820223344',
     attendance: 'Present',
     score: '93%',
@@ -39,9 +39,9 @@ const INITIAL_DEMO_STUDENTS = [
     id: 'std-p03',
     name: 'Rohan Kulkarni',
     roll: '103',
-    rollNumber: 'ASPIRE-2025-103',
+    rollNumber: 'CONCEPT-2025-103',
     course: 'NEET',
-    email: 'rohan.k@aspire.local',
+    email: 'rohan.k@conceptacademy.local',
     phone: '+919820334455',
     attendance: 'Present',
     score: '74%',
@@ -51,9 +51,9 @@ const INITIAL_DEMO_STUDENTS = [
     id: 'std-p04',
     name: 'Ananya Deshmukh',
     roll: '104',
-    rollNumber: 'ASPIRE-2025-104',
+    rollNumber: 'CONCEPT-2025-104',
     course: '11th Science',
-    email: 'ananya.d@aspire.local',
+    email: 'ananya.d@conceptacademy.local',
     phone: '+919820445566',
     attendance: 'Present',
     score: '82%',
@@ -63,9 +63,9 @@ const INITIAL_DEMO_STUDENTS = [
     id: 'std-p05',
     name: 'Siddharth Joshi',
     roll: '105',
-    rollNumber: 'ASPIRE-2025-105',
+    rollNumber: 'CONCEPT-2025-105',
     course: 'MHT-CET',
-    email: 'siddharth.j@aspire.local',
+    email: 'siddharth.j@conceptacademy.local',
     phone: '+919820556677',
     attendance: 'Present',
     score: '79%',
@@ -75,9 +75,9 @@ const INITIAL_DEMO_STUDENTS = [
     id: 'std-p06',
     name: 'Neha Verma',
     roll: '106',
-    rollNumber: 'ASPIRE-2025-106',
+    rollNumber: 'CONCEPT-2025-106',
     course: 'JEE (Mains + Adv)',
-    email: 'neha.verma@aspire.local',
+    email: 'neha.verma@conceptacademy.local',
     phone: '+919820667788',
     attendance: 'Present',
     score: '91%',
@@ -168,9 +168,11 @@ export default function AdminStudentPerformanceModal({ isOpen, onClose, onOpenMa
       setRefreshTrigger(prev => prev + 1);
     };
 
+    window.addEventListener('concept_academy:marks-updated', handleMarksUpdated);
     window.addEventListener('aspire:marks-updated', handleMarksUpdated);
     window.addEventListener('storage', handleMarksUpdated);
     return () => {
+      window.removeEventListener('concept_academy:marks-updated', handleMarksUpdated);
       window.removeEventListener('aspire:marks-updated', handleMarksUpdated);
       window.removeEventListener('storage', handleMarksUpdated);
     };
@@ -219,7 +221,7 @@ export default function AdminStudentPerformanceModal({ isOpen, onClose, onOpenMa
     // Check each test in mockTests for live admin marks in localStorage
     mockTests.forEach(t => {
       try {
-        const raw = localStorage.getItem(`aspire_marks_${t.id}`);
+        const raw = localStorage.getItem(`concept_academy_marks_${t.id}`) || localStorage.getItem(`aspire_marks_${t.id}`);
         if (raw) {
           const map = JSON.parse(raw);
           const entry = map[studentId];
@@ -333,14 +335,17 @@ export default function AdminStudentPerformanceModal({ isOpen, onClose, onOpenMa
 
     try {
       // 1. Update localStorage for this test
-      const testKey = `aspire_marks_${test.testId}`;
-      const existingStorage = JSON.parse(localStorage.getItem(testKey) || '{}');
+      const keyNew = `concept_academy_marks_${test.testId}`;
+      const keyOld = `aspire_marks_${test.testId}`;
+      const existingStorage = JSON.parse(localStorage.getItem(keyNew) || localStorage.getItem(keyOld) || '{}');
       existingStorage[selectedStudent.id] = {
         score: scoreNum,
         isAbsent: false,
         remarks: 'Live mark update by Admin'
       };
-      localStorage.setItem(testKey, JSON.stringify(existingStorage));
+      const jsonStorage = JSON.stringify(existingStorage);
+      localStorage.setItem(keyNew, jsonStorage);
+      localStorage.setItem(keyOld, jsonStorage);
 
       // 2. Update student list
       const pct = Math.round((scoreNum / (test.maxMarks || 100)) * 100);
@@ -382,14 +387,14 @@ export default function AdminStudentPerformanceModal({ isOpen, onClose, onOpenMa
       }));
 
       // 4. Dispatch custom event for real-time live sync across all components
-      window.dispatchEvent(new CustomEvent('aspire:marks-updated', {
-        detail: {
-          testId: test.testId,
-          studentId: selectedStudent.id,
-          score: scoreNum,
-          percentage: pct
-        }
-      }));
+      const marksEventDetail = {
+        testId: test.testId,
+        studentId: selectedStudent.id,
+        score: scoreNum,
+        percentage: pct
+      };
+      window.dispatchEvent(new CustomEvent('concept_academy:marks-updated', { detail: marksEventDetail }));
+      window.dispatchEvent(new CustomEvent('aspire:marks-updated', { detail: marksEventDetail }));
 
       setInlineSuccessToast(`✓ Updated ${selectedStudent.name}'s score to ${scoreNum}/${test.maxMarks || 100} (${pct}%)!`);
       setTimeout(() => setInlineSuccessToast(''), 3000);

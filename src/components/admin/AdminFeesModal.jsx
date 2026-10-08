@@ -87,7 +87,7 @@ export default function AdminFeesModal({ isOpen, onClose }) {
       'Std 9th'
     ];
     try {
-      const saved = localStorage.getItem('aspire_courses_list');
+      const saved = localStorage.getItem('concept_academy_courses_list') || localStorage.getItem('aspire_courses_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {

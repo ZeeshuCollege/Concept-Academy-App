@@ -39,7 +39,7 @@ export default function AdminAttendanceModal({ isOpen, onClose }) {
     setStudents(Array.isArray(stored) ? stored : []);
 
     try {
-      const saved = localStorage.getItem('aspire_admin_timetable');
+      const saved = localStorage.getItem('concept_academy_admin_timetable') || localStorage.getItem('aspire_admin_timetable');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -53,7 +53,7 @@ export default function AdminAttendanceModal({ isOpen, onClose }) {
     const stored = getStoredStudents();
     setStudents(Array.isArray(stored) ? stored : []);
     try {
-      const saved = localStorage.getItem('aspire_admin_timetable');
+      const saved = localStorage.getItem('concept_academy_admin_timetable') || localStorage.getItem('aspire_admin_timetable');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setTimetable(parsed);
@@ -200,7 +200,9 @@ export default function AdminAttendanceModal({ isOpen, onClose }) {
 
       // Update card metadata in cache and localStorage
       const meta = { marked: true, present: pCount, total: tCount };
-      localStorage.setItem(`aspire_att_meta_${selectedLectureForAttendance.id}_${attendanceDate}`, JSON.stringify(meta));
+      const metaJson = JSON.stringify(meta);
+      localStorage.setItem(`concept_academy_att_meta_${selectedLectureForAttendance.id}_${attendanceDate}`, metaJson);
+      localStorage.setItem(`aspire_att_meta_${selectedLectureForAttendance.id}_${attendanceDate}`, metaJson);
       setLectureAttendanceCache(prev => ({
         ...prev,
         [`${selectedLectureForAttendance.id}_${attendanceDate}`]: meta
@@ -501,7 +503,7 @@ export default function AdminAttendanceModal({ isOpen, onClose }) {
                 let cardMeta = lectureAttendanceCache[cardKey];
                 if (!cardMeta) {
                   try {
-                    const raw = localStorage.getItem(`aspire_att_meta_${lec.id}_${attendanceDate}`);
+                    const raw = localStorage.getItem(`concept_academy_att_meta_${lec.id}_${attendanceDate}`) || localStorage.getItem(`aspire_att_meta_${lec.id}_${attendanceDate}`);
                     if (raw) {
                       cardMeta = JSON.parse(raw);
                     }

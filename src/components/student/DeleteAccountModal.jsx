@@ -35,11 +35,14 @@ export default function DeleteAccountModal({ isOpen, onClose, user, onAccountDel
 
       // 2. Clean up local stored session data
       try {
+        localStorage.removeItem('concept_academy_current_user');
         localStorage.removeItem('aspire_current_user');
+        localStorage.removeItem('concept_academy_user_role');
         localStorage.removeItem('aspire_user_role');
-        const creds = JSON.parse(localStorage.getItem('aspire_creds_v1') || '{}');
+        const creds = JSON.parse(localStorage.getItem('concept_academy_creds_v1') || localStorage.getItem('aspire_creds_v1') || '{}');
         if (user?.email) {
           delete creds[user.email.toLowerCase()];
+          localStorage.setItem('concept_academy_creds_v1', JSON.stringify(creds));
           localStorage.setItem('aspire_creds_v1', JSON.stringify(creds));
         }
       } catch (e) {}
@@ -163,7 +166,7 @@ export default function DeleteAccountModal({ isOpen, onClose, user, onAccountDel
                 style={{ marginTop: '2px' }}
               />
               <span>
-                I understand that this action is irreversible and all my educational records will be wiped from ASPIRE servers.
+                I understand that this action is irreversible and all my educational records will be wiped from Concept Academy servers.
               </span>
             </label>
 

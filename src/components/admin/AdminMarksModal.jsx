@@ -17,7 +17,7 @@ export default function AdminMarksModal({ isOpen, onClose }) {
   useEffect(() => {
     if (!isOpen) return;
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -37,7 +37,7 @@ export default function AdminMarksModal({ isOpen, onClose }) {
 
   useDataSync(['tests'], () => {
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -137,7 +137,7 @@ export default function AdminMarksModal({ isOpen, onClose }) {
 
     // Load saved marks for this test from localStorage
     try {
-      const savedStorage = JSON.parse(localStorage.getItem(`aspire_marks_${selectedTestId}`) || '{}');
+      const savedStorage = JSON.parse(localStorage.getItem(`concept_academy_marks_${selectedTestId}`) || localStorage.getItem(`aspire_marks_${selectedTestId}`) || '{}');
       const initialMap = {};
       baseList.forEach(std => {
         if (savedStorage[std.id]) {
@@ -273,7 +273,9 @@ export default function AdminMarksModal({ isOpen, onClose }) {
 
     try {
       // 1. Persist marks record for this test
-      localStorage.setItem(`aspire_marks_${selectedTestId}`, JSON.stringify(studentMarks));
+      const marksJson = JSON.stringify(studentMarks);
+      localStorage.setItem(`concept_academy_marks_${selectedTestId}`, marksJson);
+      localStorage.setItem(`aspire_marks_${selectedTestId}`, marksJson);
 
       // 2. Update students list in userAuthStore with latestTest scores
       const currentStored = getStoredStudents();
@@ -304,15 +306,15 @@ export default function AdminMarksModal({ isOpen, onClose }) {
       }
 
       // Dispatch custom event for real-time live performance graph updates
-      window.dispatchEvent(new CustomEvent('aspire:marks-updated', {
-        detail: {
-          testId: selectedTestId,
-          testTitle: activeTest.title,
-          marks: studentMarks,
-          maxMarks: Number(maxMarks),
-          date: testDate
-        }
-      }));
+      const marksDetail = {
+        testId: selectedTestId,
+        testTitle: activeTest.title,
+        marks: studentMarks,
+        maxMarks: Number(maxMarks),
+        date: testDate
+      };
+      window.dispatchEvent(new CustomEvent('concept_academy:marks-updated', { detail: marksDetail }));
+      window.dispatchEvent(new CustomEvent('aspire:marks-updated', { detail: marksDetail }));
 
       broadcastDataChange('marks', {
         testId: selectedTestId,

@@ -121,7 +121,7 @@ export default function OpeningScreen({ isLoggedIn, onOpenLogin, onProceed }) {
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        {/* Official ASPIRE 3D Medallion Logo */}
+        {/* Official Concept Academy 3D Medallion Logo */}
         <div style={{
           width: '175px',
           height: '175px',
@@ -133,7 +133,7 @@ export default function OpeningScreen({ isLoggedIn, onOpenLogin, onProceed }) {
         }}>
           <img
             src="/logo.png"
-            alt="ASPIRE Learning Centre"
+            alt="Concept Academy"
             style={{
               width: '100%',
               height: '100%',

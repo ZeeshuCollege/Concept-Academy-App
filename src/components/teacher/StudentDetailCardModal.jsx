@@ -29,7 +29,7 @@ export default function StudentDetailCardModal({ isOpen, onClose, student, batch
 
   const personalDetails = [
     { key: 'name', label: 'Full Name', value: student.name, icon: User, iconBg: '#eff6ff', iconColor: '#1e3a8a' },
-    { key: 'roll', label: 'Roll Number', value: student.rollNumber || `ASPIRE-2025-${student.roll}`, icon: Award, iconBg: '#f5f3ff', iconColor: '#8b5cf6' },
+    { key: 'roll', label: 'Roll Number', value: student.rollNumber || `CONCEPT-2025-${student.roll}`, icon: Award, iconBg: '#f5f3ff', iconColor: '#8b5cf6' },
     { key: 'email', label: 'Email Id', value: student.email, icon: Mail, iconBg: '#f0f9ff', iconColor: '#0ea5e9', canCopy: true },
     { key: 'phone', label: 'Phone Number', value: student.phone || '—', icon: Phone, iconBg: '#ecfdf5', iconColor: '#10b981', canCopy: !!student.phone, isTel: !!student.phone },
     { key: 'blood', label: 'Blood Group', value: student.bloodGroup || 'Not Specified', icon: Heart, iconBg: '#fef2f2', iconColor: '#ef4444', isBadge: true },

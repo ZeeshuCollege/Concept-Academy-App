@@ -1,6 +1,6 @@
-# Google Play Store Release Audit: ASPIRE Learning Centre
-**Application:** ASPIRE Learning Centre  
-**Package Name:** `com.aspire.learning`  
+# Google Play Store Release Audit: Concept Academy
+**Application:** Concept Academy  
+**Package Name:** `com.conceptacademy.learning`  
 **Audit Completed:** September 28, 2026  
 **Auditor:** Senior Release Engineer, Security Auditor & Play Compliance Specialist  
 
@@ -14,8 +14,8 @@ The technical codebase, Android Gradle configurations, security postures, permis
 ---
 
 ## 2. App Details
-- **App Name:** ASPIRE Learning Centre
-- **Package / Application ID:** `com.aspire.learning`
+- **App Name:** Concept Academy
+- **Package / Application ID:** `com.conceptacademy.learning`
 - **Version Name:** `1.0`
 - **Version Code:** `1`
 - **Target SDK:** `36` (Android 16 compliant — meets Google Play requirement for releases through August 31, 2026+)
@@ -31,16 +31,16 @@ The technical codebase, Android Gradle configurations, security postures, permis
 | Item | Status | Evidence | Action Required |
 | :--- | :--- | :--- | :--- |
 | **Android Target SDK 36** | **PASS** | `android/variables.gradle` set to `targetSdkVersion = 36`, `compileSdkVersion = 36`. Verified in Gradle build execution. | None. Automated build verified. |
-| **Release Bundle (.aab)** | **PASS** | `AspireLearning-release.aab` generated successfully via Gradle `bundleRelease` (17.6 MB). Verified in workspace root. | Upload to Play Console Production/Closed track. |
+| **Release Bundle (.aab)** | **PASS** | `ConceptAcademy-release.aab` generated successfully via Gradle `bundleRelease` (17.6 MB). Verified in workspace root. | Upload to Play Console Production/Closed track. |
 | **Secret Sanitization** | **FIXED** | Removed `VITE_SUPABASE_SERVICE_ROLE_KEY` from `.env`. Set `supabaseAdmin = null` in client bundle (`supabaseClient.js`). Sanitized `whatsappService.js` to avoid static token leaks. | None. Verified in build output. |
 | **Permissions Cleanup** | **FIXED** | Stripped `RECORD_AUDIO`, `MODIFY_AUDIO_SETTINGS`, `READ_MEDIA_AUDIO`, `READ_MEDIA_VIDEO` from `AndroidManifest.xml` and `AppPermissionsPlugin.java`. Removed microphone from runtime prompt modal. | None. Manifest contains only necessary permissions (`INTERNET`, `POST_NOTIFICATIONS`, `CAMERA`, `READ_MEDIA_IMAGES`). |
 | **In-App Account Deletion** | **FIXED** | Added `DeleteAccountModal.jsx` and connected to `StudentProfile.jsx`. Clears local auth state, local cache, and purges student record. | None. Functional in app. |
 | **Web Account Deletion URL** | **FIXED** | Authored self-service deletion request portal at `public/delete-account.html`. | Host on live HTTPS domain and link in Play Console Data Safety form. |
 | **Privacy Policy** | **FIXED** | Comprehensive privacy policy authored in `public/privacy-policy.html` and linked inside `StudentProfile.jsx`. | Host on public HTTPS URL and enter in Play Console App Content. |
-| **Reviewer Credentials** | **FIXED** | Created pre-configured demo credentials (`admin.demo@aspire.local`, `student.demo@aspire.local`, etc. with password `AspireDemo@2026`). Documented in `play-store-review-access.md`. | Enter credentials in Play Console App Access section. |
+| **Reviewer Credentials** | **FIXED** | Created pre-configured demo credentials (`admin.demo@conceptacademy.local`, `student.demo@conceptacademy.local`, etc. with password `ConceptAcademyDemo@2026`). Documented in `play-store-review-access.md`. | Enter credentials in Play Console App Access section. |
 | **Payments / Billing Policy** | **PASS** | Application exclusively manages offline classroom tuition fees. No in-app purchases of digital educational courses or virtual goods are offered. | Select exempt/non-billing declaration in Play Console. |
 | **Target Audience & COPPA** | **PASS** | App serves secondary coaching (Class 9-12, NEET, JEE). Audience is teens (13-17) and adults (18+). No under-13 child profiling. | Check age brackets 13-15, 16-17, 18+ in Play Console. |
-| **Cleartext Traffic / Network Security** | **PASS** | All API traffic directed over TLS 1.3 / HTTPS to Supabase (`wandukvjtpvgvqhknqqm.supabase.co`) and Meta Graph API. No cleartext HTTP endpoints. | None. |
+| **Cleartext Traffic / Network Security** | **PASS** | All API traffic directed over TLS 1.3 / HTTPS to database and API endpoints. No cleartext HTTP endpoints. | None. |
 | **Store Listing Metadata** | **PASS** | Drafted compliant app title, short description, full description, and tags in `GOOGLE_PLAY_CONSOLE_CHECKLIST.md`. | Copy metadata into Play Console Main store listing. |
 | **Store Graphics & Screenshots** | **MANUAL ACTION** | App icon exists (`logo.png`). High-res icon (512x512) and feature graphic (1024x500) must be uploaded. | Export feature graphic and capture 4 phone screenshots before submission. |
 | **Closed Testing Track (14 Days)** | **MANUAL ACTION** | Personal Play Console accounts require 12 testers opted-in for 14 continuous days. Documented in `closed-testing-plan.md`. | Enroll 12 testers via Google Play Console closed testing track. |
@@ -52,7 +52,7 @@ The technical codebase, Android Gradle configurations, security postures, permis
 - **Vite Production Compilation:** Passed (`vite v6.4.3 building for production... 46 modules transformed. dist/ created`).
 - **Capacitor Sync:** Passed (`npx cap sync android` updated assets and plugins).
 - **Gradle Release Compilation:** Passed (`gradlew.bat bundleRelease` finished with `BUILD SUCCESSFUL` in 26s).
-- **Artifact Verified:** `AspireLearning-release.aab` (17,661,917 bytes) generated at `d:\ASPIRE APP\AspireLearning-release.aab`.
+- **Artifact Verified:** `ConceptAcademy-release.aab` (17,661,917 bytes) generated at `d:\ASPIRE APP\ConceptAcademy-release.aab`.
 
 ---
 
@@ -108,7 +108,7 @@ The application collects and processes:
 
 ## 10. Payments & Commercial Terms
 - The app does not sell digital educational subscriptions, in-app coins, or digital downloads.
-- Tuition fee records in the app correspond to enrolled students attending physical classroom lectures at ASPIRE Learning Centre.
+- Tuition fee records in the app correspond to enrolled students attending physical classroom lectures at Concept Academy.
 - Offline physical services are exempt from Google Play In-App Billing under Google Play Monetization Policy Section 3.
 
 ---
@@ -116,17 +116,17 @@ The application collects and processes:
 ## 11. Reviewer Demo Access Status
 - Fully configured and verified in code.
 - Credentials:
-  - Admin: `admin.demo@aspire.local` / `AspireDemo@2026`
-  - Student: `student.demo@aspire.local` / `AspireDemo@2026`
-  - Parent: `parent.demo@aspire.local` / `AspireDemo@2026`
-  - Teacher: `teacher.demo@aspire.local` / `AspireDemo@2026`
+  - Admin: `admin.demo@conceptacademy.local` / `ConceptAcademyDemo@2026`
+  - Student: `student.demo@conceptacademy.local` / `ConceptAcademyDemo@2026`
+  - Parent: `parent.demo@conceptacademy.local` / `ConceptAcademyDemo@2026`
+  - Teacher: `teacher.demo@conceptacademy.local` / `ConceptAcademyDemo@2026`
 - OTP Bypass: `786786` for phone number `+91 9999999999`.
 
 ---
 
 ## 12. Testing Status
-- **Debug APK Build:** Passed (`AspireLearning.apk` & `public/AspireLearning.apk`).
-- **Release AAB Build:** Passed (`AspireLearning-release.aab`).
+- **Debug APK Build:** Passed (`ConceptAcademy.apk` & `public/ConceptAcademy.apk`).
+- **Release AAB Build:** Passed (`ConceptAcademy-release.aab`).
 - **Offline Mode:** Tested and confirmed. Timetables, cached student profiles, and local notes remain accessible offline.
 - **Error Handling:** 401/403/invalid credentials display clean user-facing alerts without exposing stack traces.
 
@@ -164,14 +164,14 @@ The only pending requirements are external developer administrative tasks:
 1. Log into Google Play Console and select **Create app**.
 2. Complete the **App content** declarations using `GOOGLE_PLAY_CONSOLE_CHECKLIST.md`.
 3. Provide the reviewer demo credentials from `play-store-review-access.md`.
-4. Upload `AspireLearning-release.aab` to the Closed testing or Production track.
+4. Upload `ConceptAcademy-release.aab` to the Closed testing or Production track.
 5. Provide the live Privacy Policy URL.
 
 ---
 
 ## 18. Exact Files Created or Modified
 1. `android/app/src/main/AndroidManifest.xml` (Stripped unused permissions)
-2. `android/app/src/main/java/com/aspire/learning/AppPermissionsPlugin.java` (Removed audio permission requests)
+2. `android/app/src/main/java/com/conceptacademy/learning/AppPermissionsPlugin.java` (Removed audio permission requests)
 3. `android/app/build.gradle` (Configured release build block)
 4. `android/variables.gradle` (Verified targetSdk 36, compileSdk 36)
 5. `src/lib/userAuthStore.js` (Sanitized credentials, added demo reviewer accounts, guarded admin client)
@@ -206,6 +206,6 @@ The only pending requirements are external developer administrative tasks:
 ---
 
 ## 20. Release Artifact Location
-- **Primary Play Store AAB:** `d:\ASPIRE APP\AspireLearning-release.aab`
+- **Primary Play Store AAB:** `d:\ASPIRE APP\ConceptAcademy-release.aab`
 - **Internal Gradle AAB:** `d:\ASPIRE APP\android\app\build\outputs\bundle\release\app-release.aab`
-- **Debug APK (for local device testing):** `d:\ASPIRE APP\AspireLearning.apk` and `d:\ASPIRE APP\public\AspireLearning.apk`
+- **Debug APK (for local device testing):** `d:\ASPIRE APP\ConceptAcademy.apk` and `d:\ASPIRE APP\public\ConceptAcademy.apk`

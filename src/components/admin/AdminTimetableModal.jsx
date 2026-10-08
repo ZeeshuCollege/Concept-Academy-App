@@ -122,7 +122,7 @@ export default function AdminTimetableModal({ isOpen, onClose }) {
   // Load from localStorage or empty
   const [timetable, setTimetable] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_admin_timetable');
+      const saved = localStorage.getItem('concept_academy_admin_timetable') || localStorage.getItem('aspire_admin_timetable');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -160,7 +160,9 @@ export default function AdminTimetableModal({ isOpen, onClose }) {
   // Save to localStorage whenever timetable updates
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_admin_timetable', JSON.stringify(timetable));
+      const json = JSON.stringify(timetable);
+      localStorage.setItem('concept_academy_admin_timetable', json);
+      localStorage.setItem('aspire_admin_timetable', json);
       broadcastDataChange('timetable', { timetable });
     } catch (e) {}
   }, [timetable]);

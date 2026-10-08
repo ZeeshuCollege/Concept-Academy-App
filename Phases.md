@@ -1,8 +1,8 @@
-# ASPIRE Learning Centre - Implementation Phases & Roadmap
+# Concept Academy - Implementation Phases & Roadmap
 
 | **Roadmap Version** | 1.0.0 |
 | **Delivery Strategy** | Phased Milestone Rollout with Continuous Zero-Cost Validation |
-| **Primary Goal** | Deliver a full-featured, multi-role ecosystem matching `ASPIRE THEME.png` |
+| **Primary Goal** | Deliver a full-featured, multi-role ecosystem matching `CONCEPT ACADEMY THEME.png` |
 
 ---
 
@@ -10,7 +10,7 @@
 
 ```mermaid
 gantt
-    title ASPIRE Learning Centre Implementation Roadmap
+    title Concept Academy Implementation Roadmap
     dateFormat  YYYY-MM-DD
     section Phase 1
     Cloud Setup & Auth Engine       :p1, 2025-01-01, 14d
@@ -48,7 +48,7 @@ Establish the complete zero-cost cloud backend, database schema, role-based secu
 4. **Meta WhatsApp Cloud API & Edge Functions**:
    - Configure Meta for Developers App (Business type, WhatsApp product).
    - Setup WhatsApp Business Account (WABA) and register phone number ID.
-   - Create and approve `aspire_auth_otp` template message on Meta WhatsApp Business Manager.
+   - Create and approve `concept_academy_auth_otp` template message on Meta WhatsApp Business Manager.
    - Deploy `send-whatsapp-otp` Supabase Edge Function (Deno) with cryptographic OTP hashing and 60-second cooldown timer.
    - Deploy `verify-whatsapp-otp` Supabase Edge Function to validate codes and issue password reset grants.
 5. **Dual Password Recovery Screen**:
@@ -68,7 +68,7 @@ Establish the complete zero-cost cloud backend, database schema, role-based secu
 ## Phase 2: Admin Web Dashboard & Institute Governance
 
 ### Objectives
-Construct the desktop-first Admin Web Portal matching Row 4 of `ASPIRE THEME.png` to manage institute data.
+Construct the desktop-first Admin Web Portal matching Row 4 of `CONCEPT ACADEMY THEME.png` to manage institute data.
 
 ### Deliverables
 1. **Admin Workspace Layout**:
@@ -102,7 +102,7 @@ Construct the desktop-first Admin Web Portal matching Row 4 of `ASPIRE THEME.png
 ## Phase 3: Teacher Portal & Classroom Operations
 
 ### Objectives
-Build the Teacher interface (Mobile and Web responsive) matching Row 2 of `ASPIRE THEME.png`.
+Build the Teacher interface (Mobile and Web responsive) matching Row 2 of `CONCEPT ACADEMY THEME.png`.
 
 ### Deliverables
 1. **Teacher Home & Today's Schedule**:
@@ -137,11 +137,11 @@ Build the Teacher interface (Mobile and Web responsive) matching Row 2 of `ASPIR
 ## Phase 4: Student Mobile App Experience
 
 ### Objectives
-Deliver the high-engagement Student Mobile App matching Row 1 of `ASPIRE THEME.png`.
+Deliver the high-engagement Student Mobile App matching Row 1 of `CONCEPT ACADEMY THEME.png`.
 
 ### Deliverables
 1. **Splash & Welcome Flow**:
-   - High-impact ASPIRE gradient ribbon logo and *"Better Learning, Bigger Dreams"* branding.
+   - High-impact Concept Academy gradient ribbon logo and *"Better Learning, Bigger Dreams"* branding.
 2. **Student Home Dashboard**:
    - Personalized greeting, batch info, and avatar.
    - Today's Class Card with subject, timing, classroom, and *"View Schedule"* CTA.
@@ -174,14 +174,14 @@ Deliver the high-engagement Student Mobile App matching Row 1 of `ASPIRE THEME.p
 ## 5. Phase 5: Parent Mobile Portal & Fee Management
 
 ### Objectives
-Build the reassuring Parent Portal matching Row 3 of `ASPIRE THEME.png`.
+Build the reassuring Parent Portal matching Row 3 of `CONCEPT ACADEMY THEME.png`.
 
 ### Deliverables
 1. **Parent Home Dashboard**:
    - Personalized greeting and linked child card.
    - 3 Key metrics: Attendance (`92%`), Tests (`86%`), Performance (`78%`).
 2. **Multi-Child Switcher**:
-   - Seamless toggling for parents with multiple children enrolled in ASPIRE.
+   - Seamless toggling for parents with multiple children enrolled in Concept Academy.
 3. **Attendance Calendar (Dot Matrix)**:
    - Monthly calendar grid with color-coded dot badges (Green = Present, Red = Absent, Yellow = Leave, Gray = Holiday).
 4. **Academic Performance Tracking**:

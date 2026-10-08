@@ -5,9 +5,11 @@ const NativeAppPermissions = registerPlugin('AppPermissions');
 
 // BroadcastChannel for instant same-browser cross-tab synchronization
 let noticesBroadcastChannel = null;
+let legacyNoticesBroadcastChannel = null;
 try {
   if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
-    noticesBroadcastChannel = new BroadcastChannel('aspire_notices_channel');
+    noticesBroadcastChannel = new BroadcastChannel('concept_academy_notices_channel');
+    legacyNoticesBroadcastChannel = new BroadcastChannel('aspire_notices_channel');
   }
 } catch (e) {
   console.warn('BroadcastChannel not supported:', e);
@@ -21,7 +23,7 @@ function getSupabaseLiveChannel() {
   if (!supabase) return null;
 
   try {
-    activeSupabaseChannel = supabase.channel('aspire_live_notices', {
+    activeSupabaseChannel = supabase.channel('concept_academy_live_notices', {
       config: {
         broadcast: {
           self: false // Do not echo notice back to the posting device
@@ -44,8 +46,8 @@ function getSupabaseLiveChannel() {
  * On Browser: Uses HTML5 Notification API.
  */
 export async function sendSystemNotification({ title, message, body, id }) {
-  const notifTitle = title || '📢 Aspire Learning Centre';
-  const notifMessage = message || body || 'New notice posted by Aspire Learning Centre';
+  const notifTitle = title || '📢 Concept Academy';
+  const notifMessage = message || body || 'New notice posted by Concept Academy';
   const notifId = id
     ? (typeof id === 'number' ? id : Math.abs(String(id).split('').reduce((a, b) => (a << 5) - a + b.charCodeAt(0), 0)))
     : Date.now();
@@ -116,7 +118,7 @@ export async function saveNoticeToCloud(notice) {
 
     const cloudRecord = {
       id: recordId,
-      batch_id: 'aspire_notices',
+      batch_id: 'concept_academy_notices',
       batch_name: notice.title || 'Notice',
       subject: JSON.stringify({
         category: notice.category || 'General',
@@ -159,7 +161,7 @@ export async function fetchNoticesFromCloud() {
     const { data, error } = await supabase
       .from('attendance_records')
       .select('*')
-      .eq('batch_id', 'aspire_notices')
+      .in('batch_id', ['concept_academy_notices', 'aspire_notices'])
       .order('created_at', { ascending: false })
       .limit(50);
 
@@ -242,6 +244,7 @@ export function broadcastNotice(notice) {
 
   // 4. Local CustomEvent for components in current window
   if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('concept_academy:new-notice', { detail: { notice } }));
     window.dispatchEvent(new CustomEvent('aspire:new-notice', { detail: { notice } }));
   }
 }
@@ -288,7 +291,11 @@ export function subscribeToNoticeBroadcasts(onNoticeReceived) {
   if (noticesBroadcastChannel) {
     noticesBroadcastChannel.addEventListener('message', channelListener);
   }
+  if (legacyNoticesBroadcastChannel) {
+    legacyNoticesBroadcastChannel.addEventListener('message', channelListener);
+  }
   if (typeof window !== 'undefined') {
+    window.addEventListener('concept_academy:new-notice', windowListener);
     window.addEventListener('aspire:new-notice', windowListener);
   }
 
@@ -296,7 +303,11 @@ export function subscribeToNoticeBroadcasts(onNoticeReceived) {
     if (noticesBroadcastChannel) {
       noticesBroadcastChannel.removeEventListener('message', channelListener);
     }
+    if (legacyNoticesBroadcastChannel) {
+      legacyNoticesBroadcastChannel.removeEventListener('message', channelListener);
+    }
     if (typeof window !== 'undefined') {
+      window.removeEventListener('concept_academy:new-notice', windowListener);
       window.removeEventListener('aspire:new-notice', windowListener);
     }
   };

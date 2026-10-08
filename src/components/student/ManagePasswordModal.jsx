@@ -514,7 +514,7 @@ export default function ManagePasswordModal({ isOpen, onClose, user }) {
                     </div>
 
                     <p style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.4, marginBottom: '14px' }}>
-                      Enter your registered student email address below. We'll send you an official ASPIRE password reset link immediately.
+                      Enter your registered student email address below. We'll send you an official Concept Academy password reset link immediately.
                     </p>
 
                     <div>

@@ -10,7 +10,7 @@ let pendingBuild = false;
 let debounceTimer = null;
 
 console.log('\x1b[35m========================================================\x1b[0m');
-console.log('\x1b[36m👀 ASPIRE APK Auto-Watcher is active!\x1b[0m');
+console.log('\x1b[36m👀 Concept Academy APK Auto-Watcher is active!\x1b[0m');
 console.log(`\x1b[90mWatching directory: ${srcDir}\x1b[0m`);
 console.log('\x1b[32mAny saved code change will automatically rebuild the APK.\x1b[0m');
 console.log('\x1b[35m========================================================\x1b[0m\n');

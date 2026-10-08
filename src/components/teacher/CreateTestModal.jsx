@@ -41,10 +41,12 @@ export default function CreateTestModal({ isOpen, onClose, onCreated }) {
     };
 
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       const list = saved ? JSON.parse(saved) : [];
       list.push(newTest);
-      localStorage.setItem('aspire_tests_list', JSON.stringify(list));
+      const json = JSON.stringify(list);
+      localStorage.setItem('concept_academy_tests_list', json);
+      localStorage.setItem('aspire_tests_list', json);
       broadcastDataChange('tests', { test: newTest });
     } catch (err) {}
 

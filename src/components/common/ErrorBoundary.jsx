@@ -12,7 +12,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('[ASPIRE ErrorBoundary] Captured error:', error, errorInfo);
+    console.error('[Concept Academy ErrorBoundary] Captured error:', error, errorInfo);
     this.setState({ errorInfo });
   }
 
@@ -27,6 +27,7 @@ export default class ErrorBoundary extends React.Component {
 
   handleGoHome = () => {
     try {
+      localStorage.setItem('concept_academy_active_tab', 'home');
       localStorage.setItem('aspire_active_tab', 'home');
       window.history.replaceState({ tab: 'home' }, '');
     } catch (e) {}

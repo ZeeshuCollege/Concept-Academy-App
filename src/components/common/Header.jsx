@@ -32,7 +32,7 @@ export default function Header({ currentRole, onOpenNotifications, unreadCount =
         }}>
           <img
             src="/logo.png"
-            alt="ASPIRE Logo"
+            alt="Concept Academy Logo"
             style={{
               width: '100%',
               height: '100%',
@@ -50,7 +50,7 @@ export default function Header({ currentRole, onOpenNotifications, unreadCount =
               lineHeight: 1.1,
               margin: 0
             }}>
-              ASPIRE
+              CONCEPT
             </h2>
             <span style={{
               width: '5px',
@@ -68,7 +68,7 @@ export default function Header({ currentRole, onOpenNotifications, unreadCount =
             letterSpacing: '0.06em',
             textTransform: 'uppercase'
           }}>
-            LEARNING CENTRE
+            ACADEMY
           </span>
         </div>
       </div>

@@ -1,5 +1,5 @@
 /**
- * ASPIRE Auth Store — Simple & Reliable
+ * Concept Academy Auth Store — Simple & Reliable
  * Single source of truth: flat email→password map in localStorage
  * Secondary: Supabase Auth (when network available)
  */
@@ -8,41 +8,62 @@ import { createClient } from '@supabase/supabase-js';
 import { supabase, supabaseAdmin } from './supabaseClient';
 import { DEFAULT_GREY_AVATAR } from './mockData';
 import { broadcastDataChange } from './syncEvents';
+import { syncUserToTurso } from './tursoClient';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://wandukvjtpvgvqhknqqm.supabase.co';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 // Isolated ephemeral client so user registration never logs out the active admin session
 const getEphemeralAuthClient = () => {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
   return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
       detectSessionInUrl: false,
-      storageKey: 'aspire_ephemeral_auth'
+      storageKey: 'concept_academy_ephemeral_auth'
     }
   });
 };
 
-const CREDS_KEY = 'aspire_creds_v1';        // email → password map
-const USERS_KEY = 'aspire_users_v1';        // email → full user object
-const STUDENTS_LIST_KEY = 'aspire_students_list';
-const TEACHERS_LIST_KEY = 'aspire_teachers_list';
-const PARENTS_LIST_KEY = 'aspire_parents_list';
+const CREDS_KEY = 'concept_academy_creds_v1';
+const LEGACY_CREDS_KEY = 'aspire_creds_v1';
+const USERS_KEY = 'concept_academy_users_v1';
+const LEGACY_USERS_KEY = 'aspire_users_v1';
+const STUDENTS_LIST_KEY = 'concept_academy_students_list';
+const LEGACY_STUDENTS_LIST_KEY = 'aspire_students_list';
+const TEACHERS_LIST_KEY = 'concept_academy_teachers_list';
+const LEGACY_TEACHERS_LIST_KEY = 'aspire_teachers_list';
+const PARENTS_LIST_KEY = 'concept_academy_parents_list';
+const LEGACY_PARENTS_LIST_KEY = 'aspire_parents_list';
 
 // ----- Credential Helpers -----
 
 const getCredMap = () => {
-  try { return JSON.parse(localStorage.getItem(CREDS_KEY) || '{}'); } catch { return {}; }
+  try {
+    const raw = localStorage.getItem(CREDS_KEY) || localStorage.getItem(LEGACY_CREDS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
 };
 const getUserMap = () => {
-  try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); } catch { return {}; }
+  try {
+    const raw = localStorage.getItem(USERS_KEY) || localStorage.getItem(LEGACY_USERS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
 };
 const saveCredMap = (map) => {
-  try { localStorage.setItem(CREDS_KEY, JSON.stringify(map)); } catch {}
+  try {
+    const json = JSON.stringify(map);
+    localStorage.setItem(CREDS_KEY, json);
+    localStorage.setItem(LEGACY_CREDS_KEY, json);
+  } catch {}
 };
 const saveUserMap = (map) => {
-  try { localStorage.setItem(USERS_KEY, JSON.stringify(map)); } catch {}
+  try {
+    const json = JSON.stringify(map);
+    localStorage.setItem(USERS_KEY, json);
+    localStorage.setItem(LEGACY_USERS_KEY, json);
+  } catch {}
 };
 
 export const getUserPassword = (email) => {
@@ -82,7 +103,7 @@ export const addRegisteredUser = async (user) => {
 
   const record = {
     id: user.id || `usr-${Date.now()}`,
-    name: sanitizeText(user.name || 'ASPIRE User'),
+    name: sanitizeText(user.name || 'Concept Academy User'),
     email: cleanEmail,
     password: cleanPassword,
     role: role,
@@ -151,7 +172,7 @@ export const addRegisteredUser = async (user) => {
         }
       }
     } catch (adminErr) {
-      console.warn('[ASPIRE] Supabase Admin API sync notice:', adminErr?.message);
+      console.warn('[Concept Academy] Supabase Admin API sync notice:', adminErr?.message);
     }
   }
 
@@ -159,19 +180,21 @@ export const addRegisteredUser = async (user) => {
   if (!supabaseSynced && SUPABASE_URL && SUPABASE_ANON_KEY) {
     try {
       const ephemeralClient = getEphemeralAuthClient();
-      const { data: signUpData, error: signUpErr } = await ephemeralClient.auth.signUp({
-        email: cleanEmail,
-        password: cleanPassword,
-        options: {
-          data: metadataPayload
+      if (ephemeralClient) {
+        const { data: signUpData, error: signUpErr } = await ephemeralClient.auth.signUp({
+          email: cleanEmail,
+          password: cleanPassword,
+          options: {
+            data: metadataPayload
+          }
+        });
+        if (!signUpErr && signUpData?.user) {
+          supabaseUid = signUpData.user.id;
+          supabaseSynced = true;
         }
-      });
-      if (!signUpErr && signUpData?.user) {
-        supabaseUid = signUpData.user.id;
-        supabaseSynced = true;
       }
     } catch (authErr) {
-      console.warn('[ASPIRE] Supabase ephemeral auth signup notice:', authErr?.message);
+      console.warn('[Concept Academy] Supabase ephemeral auth signup notice:', authErr?.message);
     }
   }
 
@@ -202,14 +225,19 @@ export const addRegisteredUser = async (user) => {
         .upsert(profileData, { onConflict: supabaseUid ? 'id' : 'email' });
 
       if (profileErr) {
-        console.warn('[ASPIRE] Supabase public.profiles upsert notice:', profileErr.message);
+        console.warn('[Concept Academy] Supabase public.profiles upsert notice:', profileErr.message);
       } else {
-        console.info(`[ASPIRE] Profile row successfully saved in Supabase with role: "${record.role}"`);
+        console.info(`[Concept Academy] Profile row successfully saved in Supabase with role: "${record.role}"`);
       }
     } catch (tblErr) {
-      console.warn('[ASPIRE] Supabase profiles table write notice:', tblErr?.message);
+      console.warn('[Concept Academy] Supabase profiles table write notice:', tblErr?.message);
     }
   }
+
+  // D. Sync to Turso database (if configured)
+  try {
+    syncUserToTurso(record);
+  } catch (tursoErr) {}
 
   try {
     broadcastDataChange(record.role || 'students', { user: record });
@@ -228,19 +256,25 @@ export const authenticateLocalUser = (email, password) => {
   if (!cleanEmail || !cleanPass) return null;
 
   // ── 0. Reviewer Demo Accounts & Official Institute Admin ──
-  if (cleanEmail === 'admin.demo@aspire.local' && cleanPass === 'AspireDemo@2026') {
+  if (
+    (cleanEmail === 'admin.demo@conceptacademy.local' || cleanEmail === 'admin.demo@aspire.local') &&
+    (cleanPass === 'ConceptAcademyDemo@2026' || cleanPass === 'AspireDemo@2026')
+  ) {
     return {
       id: 'adm-demo',
       name: 'Administrator',
-      email: 'admin.demo@aspire.local',
+      email: cleanEmail,
       role: 'admin'
     };
   }
-  if (cleanEmail === 'aspirelearningcentre@outlook.com' && cleanPass === 'ZP&786') {
+  if (
+    (cleanEmail === 'conceptacademy@outlook.com' || cleanEmail === 'aspirelearningcentre@outlook.com') &&
+    cleanPass === 'ZP&786'
+  ) {
     return {
       id: 'admin-1',
-      name: 'ASPIRE Admin',
-      email: 'aspirelearningcentre@outlook.com',
+      name: 'Concept Academy Admin',
+      email: cleanEmail,
       role: 'admin'
     };
   }
@@ -256,9 +290,9 @@ export const authenticateLocalUser = (email, password) => {
     }
   } catch {}
 
-  // ── 2. Old format: aspire_user_<email> direct key ──
+  // ── 2. Old format: user_<email> direct key ──
   try {
-    const directRaw = localStorage.getItem(`aspire_user_${cleanEmail}`);
+    const directRaw = localStorage.getItem(`concept_academy_user_${cleanEmail}`) || localStorage.getItem(`aspire_user_${cleanEmail}`);
     if (directRaw) {
       const u = JSON.parse(directRaw);
       if (u && (u.password || '').trim() === cleanPass) {
@@ -270,9 +304,9 @@ export const authenticateLocalUser = (email, password) => {
     }
   } catch {}
 
-  // ── 3. Old format: aspire_registered_users array ──
+  // ── 3. Old format: registered_users array ──
   try {
-    const regRaw = localStorage.getItem('aspire_registered_users');
+    const regRaw = localStorage.getItem('concept_academy_registered_users') || localStorage.getItem('aspire_registered_users');
     if (regRaw) {
       const regUsers = JSON.parse(regRaw) || [];
       const found = regUsers.find(u =>
@@ -341,12 +375,17 @@ export const getRegisteredUsers = () => {
 // ----- Students -----
 
 export const getStoredStudents = () => {
-  try { return JSON.parse(localStorage.getItem(STUDENTS_LIST_KEY) || '[]'); } catch { return []; }
+  try {
+    const raw = localStorage.getItem(STUDENTS_LIST_KEY) || localStorage.getItem(LEGACY_STUDENTS_LIST_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
 };
 
 export const saveStoredStudents = (list) => {
   try {
-    localStorage.setItem(STUDENTS_LIST_KEY, JSON.stringify(list || []));
+    const json = JSON.stringify(list || []);
+    localStorage.setItem(STUDENTS_LIST_KEY, json);
+    localStorage.setItem(LEGACY_STUDENTS_LIST_KEY, json);
     broadcastDataChange('students', { count: (list || []).length });
   } catch {}
 };
@@ -375,12 +414,17 @@ export const deleteStoredStudent = (studentId) => {
 // ----- Teachers -----
 
 export const getStoredTeachers = () => {
-  try { return JSON.parse(localStorage.getItem(TEACHERS_LIST_KEY) || '[]'); } catch { return []; }
+  try {
+    const raw = localStorage.getItem(TEACHERS_LIST_KEY) || localStorage.getItem(LEGACY_TEACHERS_LIST_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
 };
 
 export const saveStoredTeachers = (list) => {
   try {
-    localStorage.setItem(TEACHERS_LIST_KEY, JSON.stringify(list || []));
+    const json = JSON.stringify(list || []);
+    localStorage.setItem(TEACHERS_LIST_KEY, json);
+    localStorage.setItem(LEGACY_TEACHERS_LIST_KEY, json);
     broadcastDataChange('teachers', { count: (list || []).length });
   } catch {}
 };
@@ -414,13 +458,18 @@ export const deduplicateParents = (list) => {
 };
 
 export const getStoredParents = () => {
-  try { return deduplicateParents(JSON.parse(localStorage.getItem(PARENTS_LIST_KEY) || '[]')); } catch { return []; }
+  try {
+    const raw = localStorage.getItem(PARENTS_LIST_KEY) || localStorage.getItem(LEGACY_PARENTS_LIST_KEY);
+    return deduplicateParents(raw ? JSON.parse(raw) : []);
+  } catch { return []; }
 };
 
 export const saveStoredParents = (list) => {
   try {
     const deduped = deduplicateParents(list || []);
-    localStorage.setItem(PARENTS_LIST_KEY, JSON.stringify(deduped));
+    const json = JSON.stringify(deduped);
+    localStorage.setItem(PARENTS_LIST_KEY, json);
+    localStorage.setItem(LEGACY_PARENTS_LIST_KEY, json);
     broadcastDataChange('parents', { count: deduped.length });
     return deduped;
   } catch { return list; }

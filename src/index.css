@@ -1,18 +1,18 @@
 /* ==========================================================================
-   ASPIRE LEARNING CENTRE - TECHNICAL BLUEPRINT DESIGN SYSTEM
+   CONCEPT ACADEMY - TECHNICAL BLUEPRINT DESIGN SYSTEM
    Synthesized with Stitch MCP: Sharp boxes, crisp 1px borders,
    geometric precision, smooth transitions, and architectural loading UI.
    ========================================================================== */
 
 :root {
   color-scheme: light;
-  /* Brand Colors - Authentically Extracted from ASPIRE Logo */
+  /* Brand Colors - Authentically Extracted from Concept Academy Logo */
   /* Primary Royal Navy & Sapphire Foundation */
   --brand-950: #07152b; /* Deep Institute Obsidian Navy */
   --brand-900: #0a1f3d; /* Logo Deep Navy - Headers & Structural Frames */
   --brand-800: #0f2d59; /* Logo Royal Navy - Primary Actions & Main Brand */
   --brand-700: #143d78; /* Deep Cobalt Blue */
-  --brand-600: #1a4f9c; /* Classic Aspire Blue */
+  --brand-600: #1a4f9c; /* Classic Concept Academy Blue */
   --brand-500: #2563eb; /* Vibrant Royal Accent */
   --brand-100: #dbeafe; /* Soft Ice Tint */
   --brand-50: #eff6ff;  /* Clean Blueprint Wash */

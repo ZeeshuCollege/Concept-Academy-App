@@ -1,7 +1,7 @@
 {
-  "name": "ASPIRE Learning Centre",
-  "short_name": "Aspire",
-  "description": "Closed digital management ecosystem for ASPIRE Learning Centre",
+  "name": "Concept Academy",
+  "short_name": "Concept Academy",
+  "description": "Closed digital management ecosystem for Concept Academy",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

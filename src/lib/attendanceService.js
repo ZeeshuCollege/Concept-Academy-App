@@ -24,8 +24,10 @@ import { broadcastDataChange } from './syncEvents';
  * );
  */
 
-const STORAGE_KEY = 'aspire_attendance_records_v1';
-const LOCKED_KEY = 'aspire_attendance_locked_batches_v1';
+const STORAGE_KEY = 'concept_academy_attendance_records_v1';
+const LEGACY_STORAGE_KEY = 'aspire_attendance_records_v1';
+const LOCKED_KEY = 'concept_academy_attendance_locked_batches_v1';
+const LEGACY_LOCKED_KEY = 'aspire_attendance_locked_batches_v1';
 
 // Helper: Format today's date as YYYY-MM-DD
 export const getTodayDateKey = () => {
@@ -39,7 +41,7 @@ export const getTodayDateKey = () => {
 // Helper: Read local attendance cache
 const getLocalRecords = () => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch (err) {
     console.error('Failed to read attendance from localStorage', err);
@@ -50,7 +52,9 @@ const getLocalRecords = () => {
 // Helper: Save local attendance cache
 const saveLocalRecords = (records) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    const json = JSON.stringify(records);
+    localStorage.setItem(STORAGE_KEY, json);
+    localStorage.setItem(LEGACY_STORAGE_KEY, json);
   } catch (err) {
     console.error('Failed to write attendance to localStorage', err);
   }
@@ -59,7 +63,7 @@ const saveLocalRecords = (records) => {
 // Helper: Read locked batches
 const getLockedBatches = () => {
   try {
-    const raw = localStorage.getItem(LOCKED_KEY);
+    const raw = localStorage.getItem(LOCKED_KEY) || localStorage.getItem(LEGACY_LOCKED_KEY);
     return raw ? JSON.parse(raw) : {};
   } catch (err) {
     console.error('Failed to read locked batches from localStorage', err);
@@ -78,7 +82,9 @@ const setBatchLocked = (batchId, dateStr, meta = {}) => {
       teacherName: meta.teacherName || 'Teacher',
       ...meta
     };
-    localStorage.setItem(LOCKED_KEY, JSON.stringify(locked));
+    const json = JSON.stringify(locked);
+    localStorage.setItem(LOCKED_KEY, json);
+    localStorage.setItem(LEGACY_LOCKED_KEY, json);
   } catch (err) {
     console.error('Failed to set batch locked in localStorage', err);
   }
@@ -194,16 +200,16 @@ export const saveBatchAttendance = async ({
   }
 
   // Broadcast real-time update event
-  window.dispatchEvent(new CustomEvent('aspire:attendance-updated', {
-    detail: {
-      batchId,
-      batchName,
-      subject,
-      date: dateStr,
-      time: formattedTime,
-      records: recordsToSave
-    }
-  }));
+  const attendanceDetail = {
+    batchId,
+    batchName,
+    subject,
+    date: dateStr,
+    time: formattedTime,
+    records: recordsToSave
+  };
+  window.dispatchEvent(new CustomEvent('concept_academy:attendance-updated', { detail: attendanceDetail }));
+  window.dispatchEvent(new CustomEvent('aspire:attendance-updated', { detail: attendanceDetail }));
   broadcastDataChange('attendance', {
     batchId,
     batchName,
@@ -266,14 +272,14 @@ export const updateAttendanceByAdmin = async ({
     }
 
     // Broadcast change
-    window.dispatchEvent(new CustomEvent('aspire:attendance-updated', {
-      detail: {
-        studentId,
-        newStatus,
-        date: dateStr,
-        updatedBy: 'admin'
-      }
-    }));
+    const updateDetail = {
+      studentId,
+      newStatus,
+      date: dateStr,
+      updatedBy: 'admin'
+    };
+    window.dispatchEvent(new CustomEvent('concept_academy:attendance-updated', { detail: updateDetail }));
+    window.dispatchEvent(new CustomEvent('aspire:attendance-updated', { detail: updateDetail }));
     broadcastDataChange('attendance', {
       studentId,
       newStatus,

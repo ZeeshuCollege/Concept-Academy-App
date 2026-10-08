@@ -1,4 +1,4 @@
-# ASPIRE Learning Centre - Project Memory & Decision Log
+# Concept Academy - Project Memory & Decision Log
 
 | **Memory File Version** | 1.0.0 |
 | **Last Updated** | Current Session |
@@ -9,7 +9,7 @@
 
 ## 1. Project Context & Mission
 
-**ASPIRE Learning Centre** is a physical offline educational institute offering intensive coaching for:
+**Concept Academy** is a physical offline educational institute offering intensive coaching for:
 - Standards 9 and 10 (Foundation)
 - Standards 11 and 12 (Higher Secondary Science)
 - NEET (National Eligibility cum Entrance Test for Medical)
@@ -18,7 +18,7 @@
 ### Core Mandate
 1. **Private Ecosystem**: The platform is restricted to enrolled students, active faculty, verified parents, and institute administrators. No public self-registration.
 2. **Zero Operating Cost**: The entire system is engineered to run permanently on free tiers of enterprise-grade cloud providers (Supabase, Meta Cloud API, Cloudflare, Google Cloud, Firebase).
-3. **High Fidelity to Theme**: The user interface strictly implements the 24 screen comps documented in `ASPIRE THEME.png`.
+3. **High Fidelity to Theme**: The user interface strictly implements the 24 screen comps documented in `CONCEPT ACADEMY THEME.png`.
 
 ---
 
@@ -61,7 +61,7 @@
 ---
 
 ### ADR-004: Closed Ecosystem with Whitelist Gatekeeper
-- **Context**: Open registration could lead to spam, unauthorized access to proprietary ASPIRE test papers, and breach of student privacy.
+- **Context**: Open registration could lead to spam, unauthorized access to proprietary Concept Academy test papers, and breach of student privacy.
 - **Decision**: All accounts must be pre-provisioned in `public.profiles` by the Admin.
   - Manual login checks pre-existing email/password.
   - Google OAuth initiates a trigger checking if the Google email exists in `public.profiles`. If not pre-registered, session is aborted immediately.
@@ -70,7 +70,7 @@
 ---
 
 ### ADR-005: DRM-Light In-App Document Protection
-- **Context**: ASPIRE faculty create proprietary question papers and study material that must not be freely downloaded or leaked.
+- **Context**: Concept Academy faculty create proprietary question papers and study material that must not be freely downloaded or leaked.
 - **Decision**:
   - No direct download buttons or export links in the client apps.
   - Private Supabase Storage with 15-minute temporary signed URLs.
@@ -92,7 +92,7 @@
 - **Decision**: All four dashboards (**Student, Teacher, Parent, Admin**) are engineered strictly as mobile applications. There is no web dashboard.
 - **Consequences**:
   - Unifies UI/UX across all four user roles.
-  - Ensures 1-to-1 match with the 24 mobile screen comps in `ASPIRE THEME.png`.
+  - Ensures 1-to-1 match with the 24 mobile screen comps in `CONCEPT ACADEMY THEME.png`.
 - **Status**: **Approved & Implemented**.
 
 ---
@@ -122,7 +122,7 @@ META_APP_ID=xxxxxxxxxxxxxxx
 META_PHONE_NUMBER_ID=xxxxxxxxxxxxxxx
 META_WABA_ID=xxxxxxxxxxxxxxx
 META_SYSTEM_USER_ACCESS_TOKEN=EAAG... (Non-expiring System User Token)
-META_OTP_TEMPLATE_NAME=aspire_auth_otp
+META_OTP_TEMPLATE_NAME=concept_academy_auth_otp
 
 # Google Cloud Console (OAuth 2.0 Free Tier)
 GOOGLE_CLIENT_ID=xxxxxxxxxxxx-xxxxxxxx.apps.googleusercontent.com

@@ -1,5 +1,5 @@
 -- =============================================================================
--- ASPIRE LEARNING CENTRE - MASTER DATABASE SCHEMA & SEED SCRIPT
+-- CONCEPT ACADEMY - MASTER DATABASE SCHEMA & SEED SCRIPT
 -- =============================================================================
 -- Run this in Supabase SQL Editor: Dashboard -> SQL Editor -> New Query -> Run
 -- =============================================================================
@@ -336,7 +336,7 @@ CREATE POLICY "Admins and teachers manage results"
     ON public.test_results FOR ALL
     USING (public.get_auth_role() IN ('admin', 'teacher'));
 
--- 15. SEED SAMPLE COURSES & BATCHES (Matching ASPIRE THEME.png)
+-- 15. SEED SAMPLE COURSES & BATCHES (Matching CONCEPT ACADEMY THEME.png)
 INSERT INTO public.courses (id, name, code, description)
 VALUES 
     ('11111111-1111-1111-1111-111111111111', 'Std. 9 - 10 Foundation', 'FND-9-10', 'Foundation course for Std 9 & 10 students'),

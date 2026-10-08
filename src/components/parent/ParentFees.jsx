@@ -40,14 +40,14 @@ export default function ParentFees({ childName = 'Student' }) {
       doc.rect(0, 0, 210, 35, 'F');
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(18);
-      doc.text('ASPIRE LEARNING CENTRE', 14, 18);
+      doc.text('CONCEPT ACADEMY', 14, 18);
       doc.setFontSize(10);
       doc.setTextColor(203, 213, 225);
       doc.text('FEE PAYMENT OFFICIAL RECEIPT', 14, 27);
 
       doc.setTextColor(15, 23, 42);
       doc.setFontSize(11);
-      doc.text(`Receipt No: ASP-2025-089`, 14, 45);
+      doc.text(`Receipt No: CA-2025-089`, 14, 45);
       doc.text(`Date: ${feeRecord?.lastPaymentDate || '15 Sep 2026'}`, 14, 52);
       doc.text(`Student Name: ${childName}`, 14, 59);
       doc.text(`Course: ${feeRecord?.course || 'Academic Year 2025-26'}`, 14, 66);
@@ -68,7 +68,7 @@ export default function ParentFees({ childName = 'Student' }) {
       });
 
       const blob = doc.output('blob');
-      await downloadBlobFile(blob, `Aspire Learning Centre Data - Receipt ${childName}.pdf`);
+      await downloadBlobFile(blob, `Concept Academy Data - Receipt ${childName}.pdf`);
     } catch (e) {
       console.error('Receipt download error:', e);
     }

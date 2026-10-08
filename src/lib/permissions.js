@@ -3,11 +3,12 @@ import { Capacitor, registerPlugin } from '@capacitor/core';
 // Native Android Plugin Bridge for runtime permissions (POST_NOTIFICATIONS, CAMERA, RECORD_AUDIO)
 const NativeAppPermissions = registerPlugin('AppPermissions');
 
-const PERMISSION_STORAGE_KEY = 'aspire_permissions_prompted_v1';
+const PERMISSION_STORAGE_KEY = 'concept_academy_permissions_prompted_v1';
+const LEGACY_PERMISSION_STORAGE_KEY = 'aspire_permissions_prompted_v1';
 
 export const isFirstLaunch = () => {
   try {
-    return !localStorage.getItem(PERMISSION_STORAGE_KEY);
+    return !localStorage.getItem(PERMISSION_STORAGE_KEY) && !localStorage.getItem(LEGACY_PERMISSION_STORAGE_KEY);
   } catch (e) {
     return false;
   }
@@ -16,6 +17,7 @@ export const isFirstLaunch = () => {
 export const markPermissionsCompleted = () => {
   try {
     localStorage.setItem(PERMISSION_STORAGE_KEY, 'true');
+    localStorage.setItem(LEGACY_PERMISSION_STORAGE_KEY, 'true');
   } catch (e) {}
 };
 

@@ -1,4 +1,4 @@
-# ASPIRE Learning Centre - System Architecture & Technical Design
+# Concept Academy - System Architecture & Technical Design
 
 | **Architecture Document Version** | 2.0.0 |
 | **System Classification** | Closed Institute Multi-Role Educational Platform |
@@ -365,13 +365,13 @@ CREATE POLICY "Admins full attendance access"
 sequenceDiagram
     autonumber
     actor User as Student / Teacher / Parent / Admin
-    participant App as ASPIRE Client App
+    participant App as Concept Academy Client App
     participant SupaAuth as Supabase Auth (GoTrue)
     participant Google as Google OAuth 2.0
     participant DB as PostgreSQL (profiles table)
 
     User->>App: Clicks "Continue with Google"
-    App->>SupaAuth: signInWithOAuth({ provider: 'google', redirectTo: 'aspireapp://callback' })
+    App->>SupaAuth: signInWithOAuth({ provider: 'google', redirectTo: 'com.conceptacademy.learning://auth' })
     SupaAuth->>Google: Redirects to Google Consent Screen
     Google-->>User: Prompts Google Account Selection
     User->>Google: Consents & Authenticates
@@ -384,7 +384,7 @@ sequenceDiagram
     else Email NOT Pre-Registered
         DB-->>SupaAuth: No profile record found
         SupaAuth-->>App: Revokes Session & Returns Access Denied
-        App-->>User: Shows Alert: "Account not registered with ASPIRE. Contact Admin."
+        App-->>User: Shows Alert: "Account not registered with Concept Academy. Contact Admin."
     end
 ```
 
@@ -394,7 +394,7 @@ sequenceDiagram
 sequenceDiagram
     autonumber
     actor User as User (Password Reset)
-    participant App as ASPIRE Client App
+    participant App as Concept Academy Client App
     participant Edge as Supabase Edge Function (send-whatsapp-otp)
     participant DB as PostgreSQL (auth_otps table)
     participant Meta as Meta WhatsApp Cloud API (v19.0)
@@ -405,7 +405,7 @@ sequenceDiagram
     Edge->>DB: Validate phone exists in public.profiles
     Edge->>Edge: Generate secure 6-digit OTP (e.g. 482910)
     Edge->>DB: Store SHA-256(OTP + salt) with 5-minute expiry
-    Edge->>Meta: POST https://graph.facebook.com/v19.0/{phone-id}/messages (Template: aspire_auth_otp)
+    Edge->>Meta: POST https://graph.facebook.com/v19.0/{phone-id}/messages (Template: concept_academy_auth_otp)
     Meta->>Phone: Delivers Official WhatsApp Message with OTP
     Edge-->>App: Returns { success: true, cooldown_seconds: 60 }
     User->>App: Enters 6-digit OTP in 6-box input
@@ -450,7 +450,7 @@ The login screen's "Forgot Password" link navigates to a unified verification sc
 
 ## 5. Protected In-App Document Viewing (Zero-Download Engine)
 
-To protect proprietary ASPIRE question papers and test documents:
+To protect proprietary Concept Academy question papers and test documents:
 
 ```mermaid
 flowchart TD
@@ -500,7 +500,7 @@ flowchart TD
 
 ## 8. Scalability & Free Tier Operational Calculations
 
-Assuming ASPIRE Learning Centre operates with **300 Students, 20 Teachers, 300 Parents, and 5 Admins** (Total ~625 Users):
+Assuming Concept Academy operates with **300 Students, 20 Teachers, 300 Parents, and 5 Admins** (Total ~625 Users):
 
 1. **Supabase Database (500 MB limit)**:
    - 625 user profiles $\approx$ 0.5 MB.
@@ -518,6 +518,6 @@ Assuming ASPIRE Learning Centre operates with **300 Students, 20 Teachers, 300 P
 4. **Supabase Edge Functions (500,000 invocations/mo)**:
    - Projected invocations: $< 5,000$ per month (under 1% utilized).
 5. **Supabase Monthly Active Users (50,000 MAU limit)**:
-   - Total ASPIRE users: 625 MAU (only 1.25% of 50,000 limit).
+   - Total Concept Academy users: 625 MAU (only 1.25% of 50,000 limit).
 
 **Conclusion**: The architecture is 100% stable, robust, and mathematically verified to remain permanently within free tiers.

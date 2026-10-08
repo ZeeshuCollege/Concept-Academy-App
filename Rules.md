@@ -1,4 +1,4 @@
-# ASPIRE Learning Centre - Operational & Development Rules
+# Concept Academy - Operational & Development Rules
 
 | **Document Version** | 1.0.0 |
 | **Enforcement Scope** | All Developers, AI Agents & Contributors |
@@ -39,7 +39,7 @@
    - Never use `service_role` key in client code. Only `anon_key` is permitted on the client.
 2. **Institute Pre-Registration Rule**:
    - Public registration endpoints are strictly prohibited.
-   - Any user attempting to sign in (via email/password or Google OAuth) whose email or phone does not exist in `public.profiles` must have their session revoked immediately with an error message: *"Account not registered with ASPIRE. Please contact institute administration."*
+   - Any user attempting to sign in (via email/password or Google OAuth) whose email or phone does not exist in `public.profiles` must have their session revoked immediately with an error message: *"Account not registered with Concept Academy. Please contact institute administration."*
 3. **Secret & Key Isolation**:
    - Never hardcode secrets, tokens, or private keys into source code or Git repositories.
    - Secrets (`META_SYSTEM_USER_ACCESS_TOKEN`, `SUPABASE_SERVICE_ROLE_KEY`, `OTP_SECRET_SALT`) must be stored strictly in Supabase Vault / Edge Function Secrets.
@@ -54,7 +54,7 @@
 
 ## 3. UI/UX & Design Fidelity Rules
 
-1. **Strict Alignment with `ASPIRE THEME.png`**:
+1. **Strict Alignment with `CONCEPT ACADEMY THEME.png`**:
    - Developers must respect the exact design language, layout hierarchy, and visual components established in `Design.md`.
    - Primary Brand Color: `#1E3A8A` (Deep Royal Navy).
    - Secondary Accent Color: `#0EA5E9` (Sky/Cyan).

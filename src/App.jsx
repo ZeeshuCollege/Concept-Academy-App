@@ -45,7 +45,7 @@ export default function App() {
   useSystemNavigation();
   const [currentRole, setCurrentRole] = useState(() => {
     try {
-      return localStorage.getItem('aspire_user_role') || 'admin';
+      return localStorage.getItem('concept_academy_user_role') || localStorage.getItem('aspire_user_role') || 'admin';
     } catch (e) {
       return 'admin';
     }
@@ -88,7 +88,7 @@ export default function App() {
   const [isPermissionsOpen, setIsPermissionsOpen] = useState(false);
   const [notices, setNotices] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_notices_list');
+      const saved = localStorage.getItem('concept_academy_notices_list') || localStorage.getItem('aspire_notices_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -106,13 +106,15 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_notices_list', JSON.stringify(notices));
+      const json = JSON.stringify(notices);
+      localStorage.setItem('concept_academy_notices_list', json);
+      localStorage.setItem('aspire_notices_list', json);
     } catch (e) {}
   }, [notices]);
 
   useDataSync(['notices'], () => {
     try {
-      const saved = localStorage.getItem('aspire_notices_list');
+      const saved = localStorage.getItem('concept_academy_notices_list') || localStorage.getItem('aspire_notices_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -131,7 +133,7 @@ export default function App() {
   // Authentication & Opening Screen States
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_is_logged_in');
+      const saved = localStorage.getItem('concept_academy_is_logged_in') ?? localStorage.getItem('aspire_is_logged_in');
       if (saved !== null) return saved === 'true';
       return false;
     } catch (e) {
@@ -146,7 +148,7 @@ export default function App() {
   const getUserForRole = (role) => {
     const base = mockUsers[role] || mockUsers.admin;
     try {
-      const saved = localStorage.getItem(`aspire_${role}_profile`);
+      const saved = localStorage.getItem(`concept_academy_${role}_profile`) || localStorage.getItem(`aspire_${role}_profile`);
       if (saved) {
         const parsed = JSON.parse(saved);
         return {
@@ -164,9 +166,9 @@ export default function App() {
   // Active user profile matching current role (persists when logged in)
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const savedAuth = localStorage.getItem('aspire_is_logged_in');
+      const savedAuth = localStorage.getItem('concept_academy_is_logged_in') ?? localStorage.getItem('aspire_is_logged_in');
       if (savedAuth === 'true') {
-        const savedRole = localStorage.getItem('aspire_user_role') || 'admin';
+        const savedRole = localStorage.getItem('concept_academy_user_role') || localStorage.getItem('aspire_user_role') || 'admin';
         return getUserForRole(savedRole);
       }
     } catch (e) {}
@@ -174,9 +176,11 @@ export default function App() {
   });
 
   const handleUpdateAvatar = (newAvatar) => {
-    if (currentUser?.id || currentUser?.email) {
+    const userKey = currentUser?.id || currentUser?.email;
+    if (userKey) {
       try {
-        localStorage.setItem(`aspire_avatar_${currentUser.id || currentUser.email}`, newAvatar);
+        localStorage.setItem(`concept_academy_avatar_${userKey}`, newAvatar);
+        localStorage.setItem(`aspire_avatar_${userKey}`, newAvatar);
       } catch (e) {
         console.error(e);
       }
@@ -189,8 +193,11 @@ export default function App() {
     setCurrentUser(prev => {
       const updated = { ...prev, ...updatedData };
       try {
-        localStorage.setItem(`aspire_${currentRole}_profile`, JSON.stringify(updated));
+        const profStr = JSON.stringify(updated);
+        localStorage.setItem(`concept_academy_${currentRole}_profile`, profStr);
+        localStorage.setItem(`aspire_${currentRole}_profile`, profStr);
         if (updated.course) {
+          localStorage.setItem('concept_academy_user_course', updated.course);
           localStorage.setItem('aspire_user_course', updated.course);
         }
       } catch (e) {
@@ -243,23 +250,23 @@ export default function App() {
       userCourse = user?.course || user?.enrolledCourse;
       if (!userCourse) {
         try {
-          const savedProfile = JSON.parse(localStorage.getItem('aspire_student_profile') || '{}');
+          const savedProfile = JSON.parse(localStorage.getItem('concept_academy_student_profile') || localStorage.getItem('aspire_student_profile') || '{}');
           userCourse = savedProfile.course;
         } catch (e) {}
       }
       if (!userCourse) {
-        userCourse = localStorage.getItem('aspire_user_course') || 'JEE';
+        userCourse = localStorage.getItem('concept_academy_user_course') || localStorage.getItem('aspire_user_course') || 'JEE';
       }
     } else if (role === 'parent') {
       userCourse = user?.linkedChild?.course || user?.linkedChild?.class || user?.linkedChildCourse || user?.course;
       if (!userCourse) {
         try {
-          const savedProfile = JSON.parse(localStorage.getItem('aspire_parent_profile') || '{}');
+          const savedProfile = JSON.parse(localStorage.getItem('concept_academy_parent_profile') || localStorage.getItem('aspire_parent_profile') || '{}');
           userCourse = savedProfile.linkedChild?.course || savedProfile.linkedChild?.class || savedProfile.linkedChildCourse || savedProfile.course;
         } catch (e) {}
       }
       if (!userCourse) {
-        userCourse = localStorage.getItem('aspire_parent_child_course') || localStorage.getItem('aspire_user_course') || 'JEE';
+        userCourse = localStorage.getItem('concept_academy_parent_child_course') || localStorage.getItem('aspire_parent_child_course') || localStorage.getItem('concept_academy_user_course') || localStorage.getItem('aspire_user_course') || 'JEE';
       }
     }
 
@@ -326,8 +333,12 @@ export default function App() {
         }, ...prev]);
       }
     };
+    window.addEventListener('concept_academy:attendance-updated', handleAttendanceChange);
     window.addEventListener('aspire:attendance-updated', handleAttendanceChange);
-    return () => window.removeEventListener('aspire:attendance-updated', handleAttendanceChange);
+    return () => {
+      window.removeEventListener('concept_academy:attendance-updated', handleAttendanceChange);
+      window.removeEventListener('aspire:attendance-updated', handleAttendanceChange);
+    };
   }, []);
 
   // Listen for admin fee alerts and add notice to notifications board
@@ -342,8 +353,12 @@ export default function App() {
         });
       }
     };
+    window.addEventListener('concept_academy:fee-alert', handleFeeAlert);
     window.addEventListener('aspire:fee-alert', handleFeeAlert);
-    return () => window.removeEventListener('aspire:fee-alert', handleFeeAlert);
+    return () => {
+      window.removeEventListener('concept_academy:fee-alert', handleFeeAlert);
+      window.removeEventListener('aspire:fee-alert', handleFeeAlert);
+    };
   }, []);
 
   // Listen for live broadcast notices from Admin (instant cross-device Supabase Realtime + Cloud sync)
@@ -351,7 +366,7 @@ export default function App() {
     // Helper to safely trigger notification if user is student/parent and not alerted yet
     const notifyIfApplicable = (notice) => {
       if (!notice) return;
-      const activeRole = localStorage.getItem('aspire_user_role') || currentRole || 'student';
+      const activeRole = localStorage.getItem('concept_academy_user_role') || localStorage.getItem('aspire_user_role') || currentRole || 'student';
       if (activeRole === 'admin') return; // Admins don't get popup notifications for notices
 
       const activeUser = currentUser || getUserForRole(activeRole);
@@ -359,19 +374,21 @@ export default function App() {
       if (!applies) return;
 
       try {
-        const alerted = JSON.parse(localStorage.getItem('aspire_alerted_notices') || '[]');
+        const alerted = JSON.parse(localStorage.getItem('concept_academy_alerted_notices') || localStorage.getItem('aspire_alerted_notices') || '[]');
         if (!alerted.includes(notice.id)) {
           alerted.push(notice.id);
-          localStorage.setItem('aspire_alerted_notices', JSON.stringify(alerted.slice(-80)));
+          const alertedJson = JSON.stringify(alerted.slice(-80));
+          localStorage.setItem('concept_academy_alerted_notices', alertedJson);
+          localStorage.setItem('aspire_alerted_notices', alertedJson);
           sendSystemNotification({
-            title: `📢 ${notice.title || 'Aspire Notice'}`,
+            title: `📢 ${notice.title || 'Concept Academy Notice'}`,
             message: notice.message || 'New announcement posted by Institute Admin.',
             id: notice.id
           });
         }
       } catch (e) {
         sendSystemNotification({
-          title: `📢 ${notice.title || 'Aspire Notice'}`,
+          title: `📢 ${notice.title || 'Concept Academy Notice'}`,
           message: notice.message || 'New announcement posted by Institute Admin.',
           id: notice.id
         });
@@ -414,7 +431,7 @@ export default function App() {
 
     // 3. LocalStorage storage event for multi-tab on same machine
     const handleStorageChange = (e) => {
-      if (e.key === 'aspire_notices_list' && e.newValue) {
+      if ((e.key === 'concept_academy_notices_list' || e.key === 'aspire_notices_list') && e.newValue) {
         try {
           const parsed = JSON.parse(e.newValue);
           if (Array.isArray(parsed)) {
@@ -627,7 +644,7 @@ export default function App() {
     let userAvatar = userAuth.avatar;
     if (!userAvatar && userIdentifier) {
       try {
-        userAvatar = localStorage.getItem(`aspire_avatar_${userIdentifier}`);
+        userAvatar = localStorage.getItem(`concept_academy_avatar_${userIdentifier}`) || localStorage.getItem(`aspire_avatar_${userIdentifier}`);
       } catch (e) {}
     }
     if (!userAvatar) {
@@ -648,6 +665,7 @@ export default function App() {
     };
     if (matched.course) {
       try {
+        localStorage.setItem('concept_academy_user_course', matched.course);
         localStorage.setItem('aspire_user_course', matched.course);
       } catch (e) {}
     }
@@ -655,9 +673,13 @@ export default function App() {
     setCurrentUser(matched);
     setIsLoggedIn(true);
     try {
+      localStorage.setItem('concept_academy_is_logged_in', 'true');
       localStorage.setItem('aspire_is_logged_in', 'true');
+      localStorage.setItem('concept_academy_user_role', userAuth.role);
       localStorage.setItem('aspire_user_role', userAuth.role);
-      localStorage.setItem(`aspire_${userAuth.role}_profile`, JSON.stringify(matched));
+      const profJson = JSON.stringify(matched);
+      localStorage.setItem(`concept_academy_${userAuth.role}_profile`, profJson);
+      localStorage.setItem(`aspire_${userAuth.role}_profile`, profJson);
     } catch (e) {}
     setActiveTab('home');
     setTabHistory(['home']);
@@ -671,6 +693,7 @@ export default function App() {
 
   const handleLogout = () => {
     try {
+      localStorage.removeItem('concept_academy_is_logged_in');
       localStorage.removeItem('aspire_is_logged_in');
     } catch (e) {}
     setIsLoggedIn(false);
@@ -682,7 +705,7 @@ export default function App() {
     tabHistoryRef.current = ['home'];
   };
 
-  // Mobile OAuth redirect deep link listener (com.aspire.learning://auth#access_token=...)
+  // Mobile OAuth redirect deep link listener (com.conceptacademy.learning://auth#access_token=...)
   useEffect(() => {
     let urlListener = null;
 
@@ -717,7 +740,7 @@ export default function App() {
                     id: sessionData.user.id,
                     email: sessionData.user.email,
                     role: userMeta.role || 'student',
-                    name: userMeta.full_name || sessionData.user.email?.split('@')[0] || 'ASPIRE User',
+                    name: userMeta.full_name || sessionData.user.email?.split('@')[0] || 'Concept Academy User',
                     course: userMeta.course || 'JEE'
                   });
                 }
@@ -735,14 +758,14 @@ export default function App() {
     // Supabase auth state change subscription
     const { data: authSub } = supabase.auth.onAuthStateChange(async (event, session) => {
       if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && session?.user) {
-        const currentSavedRole = localStorage.getItem('aspire_user_role');
-        const currentSavedLoggedIn = localStorage.getItem('aspire_is_logged_in');
+        const currentSavedRole = localStorage.getItem('concept_academy_user_role') || localStorage.getItem('aspire_user_role');
+        const currentSavedLoggedIn = localStorage.getItem('concept_academy_is_logged_in') ?? localStorage.getItem('aspire_is_logged_in');
         const userMeta = session.user.user_metadata || {};
         const incomingRole = userMeta.role || 'student';
 
         // Retain active Admin session; ignore background auth changes from created students/teachers/parents
         if (currentSavedLoggedIn === 'true' && currentSavedRole === 'admin' && incomingRole !== 'admin') {
-          console.info('[ASPIRE] Retaining active Admin session; ignoring background auth event for:', session.user.email);
+          console.info('[Concept Academy] Retaining active Admin session; ignoring background auth event for:', session.user.email);
           return;
         }
 
@@ -753,7 +776,7 @@ export default function App() {
           id: session.user.id,
           email: session.user.email,
           role: incomingRole,
-          name: userMeta.full_name || session.user.email?.split('@')[0] || 'ASPIRE User',
+          name: userMeta.full_name || session.user.email?.split('@')[0] || 'Concept Academy User',
           course: userMeta.course || 'JEE'
         });
       }

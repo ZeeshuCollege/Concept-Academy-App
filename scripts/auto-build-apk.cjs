@@ -5,9 +5,9 @@ const path = require('path');
 const rootDir = path.resolve(__dirname, '..');
 const androidDir = path.join(rootDir, 'android');
 const apkSource = path.join(androidDir, 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk');
-const rootApk = path.join(rootDir, 'AspireLearning.apk');
-const rootDebugApk = path.join(rootDir, 'AspireLearning-debug.apk');
-const publicApk = path.join(rootDir, 'public', 'AspireLearning.apk');
+const rootApk = path.join(rootDir, 'ConceptAcademy.apk');
+const rootDebugApk = path.join(rootDir, 'ConceptAcademy-debug.apk');
+const publicApk = path.join(rootDir, 'public', 'ConceptAcademy.apk');
 
 function runCommand(cmd, cwd = rootDir) {
   console.log(`\x1b[36m▶ Running: ${cmd}\x1b[0m`);

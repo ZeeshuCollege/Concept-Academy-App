@@ -12,7 +12,7 @@ export default function Timetable({ initialSubTab = 'schedule' }) {
 
   const [adminTimetable, setAdminTimetable] = useState(() => {
     try {
-      const raw = localStorage.getItem('aspire_admin_timetable');
+      const raw = localStorage.getItem('concept_academy_admin_timetable') || localStorage.getItem('aspire_admin_timetable');
       if (raw) return JSON.parse(raw);
     } catch (e) {}
     return [];
@@ -20,7 +20,7 @@ export default function Timetable({ initialSubTab = 'schedule' }) {
 
   useDataSync(['timetable'], () => {
     try {
-      const raw = localStorage.getItem('aspire_admin_timetable');
+      const raw = localStorage.getItem('concept_academy_admin_timetable') || localStorage.getItem('aspire_admin_timetable');
       setAdminTimetable(raw ? JSON.parse(raw) : []);
     } catch (e) {}
   });

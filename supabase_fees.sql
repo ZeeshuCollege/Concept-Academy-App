@@ -1,5 +1,5 @@
 -- =============================================================================
--- ASPIRE LEARNING CENTRE: STUDENT FEES TABLE FOR SUPABASE
+-- CONCEPT ACADEMY: STUDENT FEES TABLE FOR SUPABASE
 -- Run this script in Supabase Dashboard -> SQL Editor -> New Query -> Run
 -- =============================================================================
 

@@ -347,7 +347,7 @@ export default function PermissionsModal({ isOpen, onClose }) {
           color: 'var(--text-muted)'
         }}>
           <ShieldCheck size={16} color="var(--brand-800)" style={{ flexShrink: 0 }} />
-          <span>Your privacy is protected. ASPIRE only activates these permissions during academic features.</span>
+          <span>Your privacy is protected. Concept Academy only activates these permissions during academic features.</span>
         </div>
 
         {/* Action Buttons */}
@@ -423,7 +423,7 @@ export default function PermissionsModal({ isOpen, onClose }) {
               }}
             >
               <CheckCircle2 size={18} />
-              <span>Continue to Aspire App</span>
+              <span>Continue to Concept Academy App</span>
             </button>
           )}
         </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account Deletion Request - ASPIRE Learning Centre</title>
+  <title>Account Deletion Request - Concept Academy</title>
   <style>
     :root {
       --primary: #1e3a8a;
@@ -109,13 +109,13 @@
 
   <div class="header">
     <h1>Account & Data Deletion</h1>
-    <p>ASPIRE Learning Centre Self-Service Request Portal</p>
+    <p>Concept Academy Self-Service Request Portal</p>
   </div>
 
   <div class="container">
     <div class="card">
       <div class="warning-box">
-        <strong>Important Notice:</strong> Deleting your account will permanently remove your profile, login access, attendance logs, marks, and digital documents from the ASPIRE Learning Centre platform. This action cannot be undone.
+        <strong>Important Notice:</strong> Deleting your account will permanently remove your profile, login access, attendance logs, marks, and digital documents from the Concept Academy platform. This action cannot be undone.
       </div>
 
       <div id="form-container">
@@ -167,14 +167,14 @@
   </div>
 
   <div class="footer">
-    &copy; 2026 ASPIRE Learning Centre • <a href="/privacy-policy.html" style="color: #64748b;">Privacy Policy</a>
+    &copy; 2026 Concept Academy • <a href="/privacy-policy.html" style="color: #64748b;">Privacy Policy</a>
   </div>
 
   <script>
     function handleDeletionSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
-      const ref = 'ASP-DEL-' + Math.floor(100000 + Math.random() * 900000);
+      const ref = 'CA-DEL-' + Math.floor(100000 + Math.random() * 900000);
 
       document.getElementById('form-container').style.display = 'none';
       document.getElementById('confirmed-email').textContent = email;
@@ -183,8 +183,9 @@
 
       // Log request in local audit list if available
       try {
-        const requests = JSON.parse(localStorage.getItem('aspire_deletion_requests') || '[]');
+        const requests = JSON.parse(localStorage.getItem('concept_academy_deletion_requests') || localStorage.getItem('aspire_deletion_requests') || '[]');
         requests.push({ email, ref, date: new Date().toISOString() });
+        localStorage.setItem('concept_academy_deletion_requests', JSON.stringify(requests));
         localStorage.setItem('aspire_deletion_requests', JSON.stringify(requests));
       } catch (err) {}
     }

@@ -8,7 +8,7 @@ export default function ProtectedPdfViewer({
   title, 
   subtitle, 
   studentName = 'Student', 
-  rollNo = 'ASPIRE', 
+  rollNo = 'CONCEPT-ACADEMY', 
   onClose 
 }) {
   const [zoom, setZoom] = useState(1);
@@ -419,9 +419,9 @@ export default function ProtectedPdfViewer({
                   fontWeight: 900,
                   letterSpacing: '0.08em'
                 }}>
-                  ASPIRE
+                  CONCEPT
                 </span>
-                <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--brand-900)' }}>LEARNING CENTRE</span>
+                <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--brand-900)' }}>ACADEMY</span>
               </div>
               <h2 style={{ fontSize: '17px', fontWeight: 900, color: '#0f172a', margin: '6px 0 2px 0' }}>
                 {title || 'JEE ADVANCED MOCK ASSESSMENT'}
@@ -549,7 +549,7 @@ export default function ProtectedPdfViewer({
               fontSize: '11px',
               color: '#64748b'
             }}>
-              <span>ASPIRE LEARNING CENTRE • CONFIDENTIAL</span>
+              <span>CONCEPT ACADEMY • CONFIDENTIAL</span>
               <span style={{ fontWeight: 700 }}>Page 1 of 3</span>
             </div>
           </div>
@@ -651,7 +651,7 @@ export default function ProtectedPdfViewer({
               fontSize: '11px',
               color: '#64748b'
             }}>
-              <span>ASPIRE LEARNING CENTRE • IN-APP PROTECTED READER</span>
+              <span>CONCEPT ACADEMY • IN-APP PROTECTED READER</span>
               <span style={{ fontWeight: 700 }}>Page 2 of 3</span>
             </div>
           </div>
@@ -754,7 +754,7 @@ export default function ProtectedPdfViewer({
                 *** END OF QUESTION PAPER ***
               </h5>
               <p style={{ fontSize: '11px', color: '#15803d', margin: '4px 0 0 0' }}>
-                All questions vetted by ASPIRE Academic Council • Full solutions will be published after test window closes.
+                All questions vetted by Concept Academy Academic Council • Full solutions will be published after test window closes.
               </p>
             </div>
 
@@ -771,7 +771,7 @@ export default function ProtectedPdfViewer({
               fontSize: '11px',
               color: '#64748b'
             }}>
-              <span>ASPIRE LEARNING CENTRE • SECURE EXAM SYSTEM</span>
+              <span>CONCEPT ACADEMY • SECURE EXAM SYSTEM</span>
               <span style={{ fontWeight: 700 }}>Page 3 of 3</span>
             </div>
           </div>
@@ -882,7 +882,7 @@ function WatermarkOverlay({ text }) {
             letterSpacing: '2.5px'
           }}
         >
-          {text} • ASPIRE CONFIDENTIAL
+          {text} • CONCEPT ACADEMY CONFIDENTIAL
         </div>
       ))}
     </div>

@@ -2,6 +2,21 @@ import { useEffect, useRef } from 'react';
 
 // Central Event Bus for Instant Cross-Dashboard Real-Time Synchronization
 export const SYNC_EVENTS = {
+  STUDENTS: 'concept_academy:sync:students',
+  TEACHERS: 'concept_academy:sync:teachers',
+  PARENTS: 'concept_academy:sync:parents',
+  COURSES: 'concept_academy:sync:courses',
+  FEES: 'concept_academy:sync:fees',
+  ATTENDANCE: 'concept_academy:sync:attendance',
+  TIMETABLE: 'concept_academy:sync:timetable',
+  MATERIALS: 'concept_academy:sync:materials',
+  TESTS: 'concept_academy:sync:tests',
+  MARKS: 'concept_academy:sync:marks',
+  NOTICES: 'concept_academy:sync:notices',
+  ALL: 'concept_academy:sync:all'
+};
+
+const LEGACY_SYNC_EVENTS = {
   STUDENTS: 'aspire:sync:students',
   TEACHERS: 'aspire:sync:teachers',
   PARENTS: 'aspire:sync:parents',
@@ -25,7 +40,8 @@ export function broadcastDataChange(domain, detail = {}) {
   if (typeof window === 'undefined') return;
 
   const upper = (domain || 'all').toUpperCase();
-  const eventName = SYNC_EVENTS[upper] || `aspire:sync:${domain.toLowerCase()}`;
+  const eventName = SYNC_EVENTS[upper] || `concept_academy:sync:${domain.toLowerCase()}`;
+  const legacyEventName = LEGACY_SYNC_EVENTS[upper] || `aspire:sync:${domain.toLowerCase()}`;
 
   const payload = {
     domain,
@@ -33,9 +49,10 @@ export function broadcastDataChange(domain, detail = {}) {
     ...detail
   };
 
-  // 1. Dispatch domain-specific event in the current window
+  // 1. Dispatch domain-specific event in the current window (both modern & legacy)
   try {
     window.dispatchEvent(new CustomEvent(eventName, { detail: payload }));
+    window.dispatchEvent(new CustomEvent(legacyEventName, { detail: payload }));
   } catch (e) {
     console.warn(`Failed to dispatch ${eventName}:`, e);
   }
@@ -43,14 +60,17 @@ export function broadcastDataChange(domain, detail = {}) {
   // 2. Dispatch global sync event in current window
   try {
     window.dispatchEvent(new CustomEvent(SYNC_EVENTS.ALL, { detail: payload }));
+    window.dispatchEvent(new CustomEvent(LEGACY_SYNC_EVENTS.ALL, { detail: payload }));
   } catch (e) {}
 
   // 3. Trigger cross-tab/cross-window sync via localStorage update
   try {
-    localStorage.setItem('aspire_global_sync_tick', JSON.stringify({
+    const tickData = JSON.stringify({
       domain,
       time: Date.now()
-    }));
+    });
+    localStorage.setItem('concept_academy_global_sync_tick', tickData);
+    localStorage.setItem('aspire_global_sync_tick', tickData);
   } catch (e) {}
 }
 
@@ -69,14 +89,19 @@ export function useDataSync(domains, onSync) {
     if (typeof window === 'undefined') return;
 
     const domainList = Array.isArray(domains) ? domains : [domains];
-    const eventNames = domainList.map(d => {
+    const eventNames = [];
+    domainList.forEach(d => {
       const upper = (d || '').toUpperCase();
-      return SYNC_EVENTS[upper] || `aspire:sync:${d.toLowerCase()}`;
+      eventNames.push(SYNC_EVENTS[upper] || `concept_academy:sync:${d.toLowerCase()}`);
+      eventNames.push(LEGACY_SYNC_EVENTS[upper] || `aspire:sync:${d.toLowerCase()}`);
     });
 
     // Always include global ALL event
     if (!eventNames.includes(SYNC_EVENTS.ALL)) {
       eventNames.push(SYNC_EVENTS.ALL);
+    }
+    if (!eventNames.includes(LEGACY_SYNC_EVENTS.ALL)) {
+      eventNames.push(LEGACY_SYNC_EVENTS.ALL);
     }
 
     const handleEvent = (e) => {
@@ -91,7 +116,7 @@ export function useDataSync(domains, onSync) {
 
     // Cross-tab storage listener
     const handleStorage = (e) => {
-      if (e.key === 'aspire_global_sync_tick') {
+      if (e.key === 'concept_academy_global_sync_tick' || e.key === 'aspire_global_sync_tick') {
         try {
           const parsed = JSON.parse(e.newValue || '{}');
           if (domainList.includes(parsed.domain) || domainList.includes('all')) {

@@ -1,5 +1,5 @@
 -- =============================================================================
--- ASPIRE LEARNING CENTRE: USER & ROLE MANAGEMENT IN SUPABASE
+-- CONCEPT ACADEMY: USER & ROLE MANAGEMENT IN SUPABASE
 -- Run this script in your Supabase Project -> SQL Editor -> New Query -> Run
 -- =============================================================================
 

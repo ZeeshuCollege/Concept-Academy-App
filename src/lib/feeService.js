@@ -1,5 +1,5 @@
 /**
- * ASPIRE Learning Centre - Fee Management Service
+ * Concept Academy - Fee Management Service
  * Manages student fee records, progress calculations, amount formatting (k and L),
  * persistent storage directly in Supabase Backend Database, and alerts dispatch.
  */
@@ -8,10 +8,11 @@ import { supabase } from './supabaseClient.js';
 import { getStoredStudents } from './userAuthStore.js';
 import { broadcastDataChange } from './syncEvents.js';
 
-export const FEES_STORAGE_KEY = 'aspire_fees_records_v1';
+export const FEES_STORAGE_KEY = 'concept_academy_fees_records_v1';
+export const LEGACY_FEES_STORAGE_KEY = 'aspire_fees_records_v1';
 
 /**
- * Format amounts according to ASPIRE rules:
+ * Format amounts according to Concept Academy rules:
  * - Use 'L' for Lakh (>= 1,00,000) e.g., 100000 -> 1L, 150000 -> 1.5L
  * - Use 'k' for Thousands (>= 1,00,000) e.g., 11000 -> 11k, 20000 -> 20k
  * - Pure numbers for < 1000
@@ -46,7 +47,8 @@ export function formatFeeFraction(paid, total) {
   return `${formatFeeAmount(paid)}/${formatFeeAmount(total)}`;
 }
 
-export const COURSE_DEFAULT_FEES_STORAGE_KEY = 'aspire_course_default_fees_v1';
+export const COURSE_DEFAULT_FEES_STORAGE_KEY = 'concept_academy_course_default_fees_v1';
+export const LEGACY_COURSE_DEFAULT_FEES_STORAGE_KEY = 'aspire_course_default_fees_v1';
 
 export const INITIAL_COURSE_DEFAULT_FEES = {
   'JEE (Mains + Adv)': 60000,
@@ -66,7 +68,7 @@ export const INITIAL_COURSE_DEFAULT_FEES = {
  */
 export function getCourseDefaultFees() {
   try {
-    const raw = localStorage.getItem(COURSE_DEFAULT_FEES_STORAGE_KEY);
+    const raw = localStorage.getItem(COURSE_DEFAULT_FEES_STORAGE_KEY) || localStorage.getItem(LEGACY_COURSE_DEFAULT_FEES_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && typeof parsed === 'object') {
@@ -82,8 +84,11 @@ export function getCourseDefaultFees() {
  */
 export function saveCourseDefaultFees(feesMap) {
   try {
-    localStorage.setItem(COURSE_DEFAULT_FEES_STORAGE_KEY, JSON.stringify(feesMap));
+    const json = JSON.stringify(feesMap);
+    localStorage.setItem(COURSE_DEFAULT_FEES_STORAGE_KEY, json);
+    localStorage.setItem(LEGACY_COURSE_DEFAULT_FEES_STORAGE_KEY, json);
     if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('concept_academy:course-fees-updated', { detail: feesMap }));
       window.dispatchEvent(new CustomEvent('aspire:course-fees-updated', { detail: feesMap }));
     }
     broadcastDataChange('fees', { type: 'course-defaults', feesMap });
@@ -289,7 +294,11 @@ export async function fetchFeesFromSupabase() {
   const list = Array.from(map.values());
   runtimeFeeCache = list;
   // Cache copy for instant offline boot
-  try { localStorage.setItem(FEES_STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
+  try {
+    const json = JSON.stringify(list);
+    localStorage.setItem(FEES_STORAGE_KEY, json);
+    localStorage.setItem(LEGACY_FEES_STORAGE_KEY, json);
+  } catch (e) {}
   return list;
 }
 
@@ -301,7 +310,7 @@ export function getStoredFees() {
     return runtimeFeeCache;
   }
   try {
-    const raw = localStorage.getItem(FEES_STORAGE_KEY);
+    const raw = localStorage.getItem(FEES_STORAGE_KEY) || localStorage.getItem(LEGACY_FEES_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) {
@@ -321,7 +330,9 @@ export function getStoredFees() {
 export function saveStoredFees(feesList) {
   runtimeFeeCache = feesList;
   try {
-    localStorage.setItem(FEES_STORAGE_KEY, JSON.stringify(feesList || []));
+    const json = JSON.stringify(feesList || []);
+    localStorage.setItem(FEES_STORAGE_KEY, json);
+    localStorage.setItem(LEGACY_FEES_STORAGE_KEY, json);
     broadcastDataChange('fees', { count: (feesList || []).length });
   } catch (e) {}
 }
@@ -478,6 +489,9 @@ export function sendFeeNotificationAlert(student) {
 
   // Broadcast event
   if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('concept_academy:fee-alert', {
+      detail: { notice, student }
+    }));
     window.dispatchEvent(new CustomEvent('aspire:fee-alert', {
       detail: { notice, student }
     }));
@@ -546,6 +560,7 @@ export function createOrUpdateStudentFeeRecord(studentData) {
   syncFeeToSupabaseBackend(newOrUpdatedRecord);
 
   if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('concept_academy:fee-alert', { detail: { record: newOrUpdatedRecord } }));
     window.dispatchEvent(new CustomEvent('aspire:fee-alert', { detail: { record: newOrUpdatedRecord } }));
     window.dispatchEvent(new Event('storage'));
   }

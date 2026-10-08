@@ -5,7 +5,7 @@ import { useSystemNavigation } from '../../lib/systemNavigation';
 export default function BottomNav({ role, activeTab, setActiveTab }) {
   const { navMode, isKeyboardOpen } = useSystemNavigation();
 
-  // Define nav configurations per role based on ASPIRE THEME.png
+  // Define nav configurations per role based on CONCEPT ACADEMY THEME.png
   const navConfigs = {
     student: [
       { id: 'home', label: 'Home', icon: Home },

@@ -54,12 +54,12 @@ export default function StudentProfile({ user, onLogout, onUpdateAvatar, onUpdat
 
   // Dynamic Verification Badge
   const roleBadgeLabel = isTeacher
-    ? 'Verified ASPIRE Teacher'
+    ? 'Verified Concept Academy Teacher'
     : isParent
-    ? 'Verified ASPIRE Parent'
+    ? 'Verified Concept Academy Parent'
     : isAdmin
-    ? 'Verified ASPIRE Admin'
-    : 'Verified ASPIRE Student';
+    ? 'Verified Concept Academy Admin'
+    : 'Verified Concept Academy Student';
 
   // Dynamic Personal Details Badge
   const personalDetailsBadge = isTeacher
@@ -164,7 +164,7 @@ export default function StudentProfile({ user, onLogout, onUpdateAvatar, onUpdat
                 } else if (item.label === 'Delete Account & Data') {
                   setIsDeleteAccountOpen(true);
                 } else if (item.label === 'Help & Support') {
-                  window.location.href = 'mailto:aspirelearningcentre@outlook.com';
+                  window.location.href = 'mailto:conceptacademy@outlook.com';
                 }
               }}
               style={{

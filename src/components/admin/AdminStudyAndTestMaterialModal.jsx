@@ -84,10 +84,10 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
     }
   }, [initialSubCategory, isOpen]);
 
-  // ── 1. Study Materials State (Synced with aspire_study_materials) ──
+  // ── 1. Study Materials State (Synced with concept_academy_study_materials) ──
   const [studyMaterials, setStudyMaterials] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_study_materials');
+      const saved = localStorage.getItem('concept_academy_study_materials') || localStorage.getItem('aspire_study_materials');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -98,15 +98,17 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
 
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_study_materials', JSON.stringify(studyMaterials));
+      const json = JSON.stringify(studyMaterials);
+      localStorage.setItem('concept_academy_study_materials', json);
+      localStorage.setItem('aspire_study_materials', json);
       broadcastDataChange('materials', { count: studyMaterials.length });
     } catch (e) {}
   }, [studyMaterials]);
 
-  // ── 2. Question Papers State (Synced with aspire_tests_list) ──
+  // ── 2. Question Papers State (Synced with concept_academy_tests_list) ──
   const [questionPapers, setQuestionPapers] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -117,14 +119,16 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
 
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_tests_list', JSON.stringify(questionPapers));
+      const json = JSON.stringify(questionPapers);
+      localStorage.setItem('concept_academy_tests_list', json);
+      localStorage.setItem('aspire_tests_list', json);
       broadcastDataChange('tests', { count: questionPapers.length });
     } catch (e) {}
   }, [questionPapers]);
 
   useDataSync(['materials'], () => {
     try {
-      const saved = localStorage.getItem('aspire_study_materials');
+      const saved = localStorage.getItem('concept_academy_study_materials') || localStorage.getItem('aspire_study_materials');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setStudyMaterials(parsed);
@@ -134,7 +138,7 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
 
   useDataSync(['tests'], () => {
     try {
-      const saved = localStorage.getItem('aspire_tests_list');
+      const saved = localStorage.getItem('concept_academy_tests_list') || localStorage.getItem('aspire_tests_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setQuestionPapers(parsed);
@@ -142,10 +146,10 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
     } catch (e) {}
   });
 
-  // ── 3. Solutions State (Synced with aspire_solutions_list) ──
+  // ── 3. Solutions State (Synced with concept_academy_solutions_list) ──
   const [solutions, setSolutions] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_solutions_list');
+      const saved = localStorage.getItem('concept_academy_solutions_list') || localStorage.getItem('aspire_solutions_list');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -156,7 +160,9 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
 
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_solutions_list', JSON.stringify(solutions));
+      const json = JSON.stringify(solutions);
+      localStorage.setItem('concept_academy_solutions_list', json);
+      localStorage.setItem('aspire_solutions_list', json);
     } catch (e) {}
   }, [solutions]);
 
@@ -296,7 +302,7 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
         size: newType === 'Video' ? 'Video Stream' : 'PDF Document',
         date: dateFormatted,
         attachmentUrl: attachment,
-        description: newDescription.trim() || 'Study material uploaded by ASPIRE Admin.'
+        description: newDescription.trim() || 'Study material uploaded by Concept Academy Admin.'
       };
       setStudyMaterials([newMat, ...studyMaterials]);
       setSuccessToast(`✓ Study Material "${newMat.title}" added successfully!`);
@@ -328,7 +334,7 @@ export default function AdminStudyAndTestMaterialModal({ isOpen, onClose, initia
         type: newType,
         date: dateFormatted,
         attachmentUrl: attachment,
-        description: newDescription.trim() || 'Solution key uploaded by ASPIRE Admin.'
+        description: newDescription.trim() || 'Solution key uploaded by Concept Academy Admin.'
       };
       setSolutions([newSol, ...solutions]);
       setSuccessToast(`✓ Solution "${newSol.title}" uploaded successfully!`);

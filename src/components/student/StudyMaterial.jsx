@@ -9,7 +9,7 @@ export default function StudyMaterial({ onOpenViewer }) {
 
   const [materialsList, setMaterialsList] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_study_materials');
+      const saved = localStorage.getItem('concept_academy_study_materials') || localStorage.getItem('aspire_study_materials');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -20,7 +20,7 @@ export default function StudyMaterial({ onOpenViewer }) {
 
   useDataSync(['materials'], () => {
     try {
-      const saved = localStorage.getItem('aspire_study_materials');
+      const saved = localStorage.getItem('concept_academy_study_materials') || localStorage.getItem('aspire_study_materials');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setMaterialsList(parsed);

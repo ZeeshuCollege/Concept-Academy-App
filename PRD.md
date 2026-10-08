@@ -1,8 +1,8 @@
-# ASPIRE Learning Centre - Product Requirement Document (PRD)
+# Concept Academy - Product Requirement Document (PRD)
 
 | **Document Version** | 2.0.0 |
 | **Document Status** | Approved Specification |
-| **Target Release** | ASPIRE Digital Ecosystem v1.0 |
+| **Target Release** | Concept Academy Digital Ecosystem v1.0 |
 | **Ecosystem Type** | Closed Private Educational Platform |
 | **Cost Constraint** | **100% Free Subscriptions Only (Zero-Cost Infrastructure)** |
 
@@ -10,16 +10,16 @@
 
 ## 1. Executive Summary & Institute Vision
 
-**ASPIRE Learning Centre** is a premier offline coaching institute delivering competitive and academic curriculum for:
+**Concept Academy** is a premier offline coaching institute delivering competitive and academic curriculum for:
 - **Secondary School**: Standard 9 and Standard 10
 - **Higher Secondary Science**: Standard 11 and Standard 12
 - **National Competitive Exams**: NEET (Medical), JEE Main, and JEE Advanced (Engineering)
 
-The **ASPIRE Digital Platform** is a **strictly closed, private ecosystem** engineered specifically for the students, faculty, parents, and administrative management of ASPIRE Learning Centre.
+The **Concept Academy Digital Platform** is a **strictly closed, private ecosystem** engineered specifically for the students, faculty, parents, and administrative management of Concept Academy.
 
 > [!IMPORTANT]
 > **Core Product Principle**:
-> This platform is **NOT** an open public ed-tech marketplace or MOOC. There is **NO public self-registration**. All user accounts are provisioned, authorized, and governed directly by ASPIRE institute management. The platform digitizes and optimizes offline classroom operations, real-time academic monitoring, and multi-stakeholder communication.
+> This platform is **NOT** an open public ed-tech marketplace or MOOC. There is **NO public self-registration**. All user accounts are provisioned, authorized, and governed directly by Concept Academy institute management. The platform digitizes and optimizes offline classroom operations, real-time academic monitoring, and multi-stakeholder communication.
 
 ---
 
@@ -46,7 +46,7 @@ The entire system is architected to operate **permanently on 100% Free Tiers**, 
 The platform bridges four synchronized stakeholders:
 ```
            ┌──────────────────────────────────────────────┐
-           │              ASPIRE Admin App                │
+           │          Concept Academy Admin App           │
            │     (Mobile App: Complete Institute Governance)│
            └──────────────────────┬───────────────────────┘
                                   │
@@ -61,7 +61,7 @@ The platform bridges four synchronized stakeholders:
 
 > [!IMPORTANT]
 > **100% Mobile-Only Architecture Mandate**:
-> All four dashboards (**Student, Teacher, Parent, and Admin**) are built exclusively as **native mobile applications for Android & iOS**. There is **NO web dashboard**. Every workflow—from daily student timetable viewing to institute-wide administrator enrollment and fee auditing—is engineered directly for mobile screens matching the exact mobile comps in `ASPIRE THEME.png`.
+> All four dashboards (**Student, Teacher, Parent, and Admin**) are built exclusively as **native mobile applications for Android & iOS**. There is **NO web dashboard**. Every workflow—from daily student timetable viewing to institute-wide administrator enrollment and fee auditing—is engineered directly for mobile screens matching the exact mobile comps in `CONCEPT ACADEMY THEME.png`.
 >
 > **Core Technology Selection**:
 > Built using **Flutter (Dart)**, the premier cross-platform engine ensuring 100% identical pixel-perfect UI, 120fps hardware acceleration, native DRM-light protection (`FLAG_SECURE`), and single-codebase parity across both **Android and iOS**.
@@ -119,7 +119,7 @@ The platform bridges four synchronized stakeholders:
 - Direct Google Sign-In button integrated via Supabase Google Provider.
 - **Whitelist Gatekeeper**: When a user signs in with Google, an Edge Function / Trigger validates whether the returned Google email address exists in the pre-registered `profiles` table.
   - If registered $\rightarrow$ Auth session granted, user redirected to their role-specific dashboard.
-  - If not registered $\rightarrow$ Session terminated immediately with error: *"This Google account is not registered with ASPIRE Learning Centre. Please contact institute administration."*
+  - If not registered $\rightarrow$ Session terminated immediately with error: *"This Google account is not registered with Concept Academy. Please contact institute administration."*
 
 #### C. Role Selector on Login Screen
 - Pill selector for `[Student | Teacher | Parent | Admin]` ensures the UI tailors the login experience, validates role compatibility, and redirects to the proper root navigation stack.
@@ -169,7 +169,7 @@ Users who forget their password have the autonomy to select between **two secure
      "to": "919876543210",
      "type": "template",
      "template": {
-       "name": "aspire_auth_otp",
+       "name": "concept_academy_auth_otp",
        "language": { "code": "en" },
        "components": [
          {
@@ -192,7 +192,7 @@ Users who forget their password have the autonomy to select between **two secure
 
 ### 6.2 Option 2: Email Password Reset (Supabase Auth)
 1. **Trigger**: User selects *"Verify via Email"*.
-2. **Dispatch**: Supabase client executes `supabase.auth.resetPasswordForEmail(email, { redirectTo: 'aspireapp://reset-password' })`.
+2. **Dispatch**: Supabase client executes `supabase.auth.resetPasswordForEmail(email, { redirectTo: 'com.conceptacademy.learning://reset-password' })`.
 3. **Execution**: User receives an email with an action link or numeric OTP.
 4. **Validation**: Deep link or OTP handler opens the secure password reset screen.
 5. **Update**: User sets a new password via `supabase.auth.updateUser({ password: newPassword })`.
@@ -202,9 +202,9 @@ Users who forget their password have the autonomy to select between **two secure
 ## 7. Detailed Functional Modules (Mapped to Visual Theme)
 
 ### 7.1 Student Portal (Mobile App)
-Based on `ASPIRE THEME.png` Row 1:
+Based on `CONCEPT ACADEMY THEME.png` Row 1:
 1. **Splash & Welcome Screen**:
-   - High-impact ASPIRE gradient ribbon logo with tagline *"Better Learning, Bigger Dreams"*.
+   - High-impact Concept Academy gradient ribbon logo with tagline *"Better Learning, Bigger Dreams"*.
    - Primary action: *"Get Started"* leading to unified login.
 2. **Student Home Dashboard**:
    - Header: Personalized greeting (*"Good Morning, Rohan Sharma"*), current batch badge (*"Std. 12 • Science • JEE"*), profile avatar.
@@ -236,7 +236,7 @@ Based on `ASPIRE THEME.png` Row 1:
 ---
 
 ### 7.2 Teacher Portal (Mobile/Tablet/Web)
-Based on `ASPIRE THEME.png` Row 2:
+Based on `CONCEPT ACADEMY THEME.png` Row 2:
 1. **Teacher Dashboard**:
    - Greeting (*"Good Morning, Ms. Priya Shah • Physics Teacher"*).
    - Today's Classes timeline with room numbers and batch tags.
@@ -270,7 +270,7 @@ Based on `ASPIRE THEME.png` Row 2:
 ---
 
 ### 7.3 Parent Portal (Mobile App)
-Based on `ASPIRE THEME.png` Row 3:
+Based on `CONCEPT ACADEMY THEME.png` Row 3:
 1. **Parent Home Dashboard**:
    - Personalized greeting (*"Hello, Amit Sharma"*).
    - **Linked Child Card**: Child avatar, name (*"Rohan Sharma"*), class (*"Std. 12 • Science"*).
@@ -278,7 +278,7 @@ Based on `ASPIRE THEME.png` Row 3:
    - Immediate alert for upcoming tests or absent marks.
 2. **Child Profile & Navigation Hub**:
    - Single-tap access to Child Profile, Attendance Calendar, Performance Trends, Test Results, Homework, and Fee Details.
-   - Multi-child switcher for parents with more than one student enrolled at ASPIRE.
+   - Multi-child switcher for parents with more than one student enrolled at Concept Academy.
 3. **Attendance Calendar (Dot Matrix)**:
    - Monthly and Weekly toggle.
    - Visual calendar grid with colored dot indicators:
@@ -301,9 +301,9 @@ Based on `ASPIRE THEME.png` Row 3:
 ---
 
 ### 7.4 Admin Mobile App
-Based on `ASPIRE THEME.png` Row 4 (Screens 25 to 30):
+Based on `CONCEPT ACADEMY THEME.png` Row 4 (Screens 25 to 30):
 1. **Executive KPI Dashboard (Mobile Screen 25)**:
-   - Header with ASPIRE branding, Admin greeting, and active notifications.
+   - Header with Concept Academy branding, Admin greeting, and active notifications.
    - Top Metrics KPI Cards (Swipeable/Grid):
      - **Total Students**: `248` (Active enrollments)
      - **Present Today**: `218` (Live daily attendance)
@@ -337,7 +337,7 @@ Based on `ASPIRE THEME.png` Row 4 (Screens 25 to 30):
 
 ## 8. In-App Document Security & DRM-Light Architecture
 
-To protect ASPIRE's intellectual property (proprietary question papers, copyrighted study materials):
+To protect Concept Academy's intellectual property (proprietary question papers, copyrighted study materials):
 1. **Direct Download Prohibition**: The mobile and web clients do not provide a "Download File" or "Save to Disk" option.
 2. **Short-Lived Signed URLs**: Supabase Storage buckets for `test-papers` and `study-materials` are private. Files are accessed via temporary signed URLs with a 15-minute expiration time.
 3. **Sandboxed Viewport Rendering**:
@@ -374,4 +374,4 @@ To protect ASPIRE's intellectual property (proprietary question papers, copyrigh
 3. **WhatsApp OTP via Meta Dev App**: Direct integration with WhatsApp Cloud API using pre-approved authentication templates for instant 6-digit OTP delivery.
 4. **Dual Password Reset Architecture**: Autonomous recovery enabling users to select either WhatsApp OTP or Supabase Email Reset.
 5. **100% Free-Tier Guarantee**: Strict zero-cost operational blueprint leveraging Supabase, Meta Cloud API (1,000 free monthly conversations), Google Cloud Identity, Cloudflare Pages, and Firebase Cloud Messaging.
-6. **Complete Visual Design Alignment**: 1-to-1 functional specification for all 24 UI screens featured in `ASPIRE THEME.png`.
+6. **Complete Visual Design Alignment**: 1-to-1 functional specification for all 24 UI screens featured in `CONCEPT ACADEMY THEME.png`.

@@ -51,7 +51,7 @@ export const SUBJECT_OPTIONS = [
 export default function AdminStudyMaterialsModal({ isOpen, onClose }) {
   const [materials, setMaterials] = useState(() => {
     try {
-      const saved = localStorage.getItem('aspire_study_materials');
+      const saved = localStorage.getItem('concept_academy_study_materials') || localStorage.getItem('aspire_study_materials');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -62,14 +62,16 @@ export default function AdminStudyMaterialsModal({ isOpen, onClose }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('aspire_study_materials', JSON.stringify(materials));
+      const json = JSON.stringify(materials);
+      localStorage.setItem('concept_academy_study_materials', json);
+      localStorage.setItem('aspire_study_materials', json);
       broadcastDataChange('materials', { count: materials.length });
     } catch (e) {}
   }, [materials]);
 
   useDataSync(['materials'], () => {
     try {
-      const saved = localStorage.getItem('aspire_study_materials');
+      const saved = localStorage.getItem('concept_academy_study_materials') || localStorage.getItem('aspire_study_materials');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setMaterials(parsed);
@@ -174,7 +176,7 @@ export default function AdminStudyMaterialsModal({ isOpen, onClose }) {
       size: newType === 'Video' ? 'Video Stream' : 'PDF Document',
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
       attachmentUrl: processedUrl || 'https://drive.google.com/file/d/1fRm5DBtyZYxEYMpTtQ2ujCBvME4zz749/preview',
-      description: newDescription.trim() || 'Study material uploaded by ASPIRE Admin.'
+      description: newDescription.trim() || 'Study material uploaded by Concept Academy Admin.'
     };
 
     setMaterials([newMat, ...materials]);
